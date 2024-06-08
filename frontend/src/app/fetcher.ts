@@ -2,15 +2,14 @@ import wretch, { Wretch, WretchError } from "wretch";
 import { AuthActions } from "@/app/auth/utils";
 require('dotenv').config();
 
-const BASE_URL = process.env.BASE_URL;
-console.log(`Base URL: ${BASE_URL}`);
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 // Extract necessary functions from the AuthActions utility.
 const { handleJWTRefresh, storeToken, getToken } = AuthActions();
 
 const api = () => {
   return (
-    wretch('http://localhost:8000')
+    wretch(BASE_URL)
       // Initialize authentication with the access token.
       .auth(`Bearer ${getToken("access")}`)
       // Catch 401 errors to refresh the token and retry the request.
