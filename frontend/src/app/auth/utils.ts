@@ -2,9 +2,11 @@
 import wretch from "wretch";
 import Cookies from "js-cookie";
 require('dotenv').config();
+const BASE_URL = process.env.BASE_URL? process.env.BASE_URL: "http://localhost:8000";
+
 
 // Base API setup for making HTTP requests
-const api = wretch("http://localhost:8000").accept("application/json");
+const api = wretch(BASE_URL).accept("application/json");
 
 /**
  * Stores a token in cookies.
@@ -37,7 +39,7 @@ const storeToken = (token: string, type: "access" | "refresh") => {
   };
 
   const login = (email: string, password: string) => {
-    return api.post({ username: email, password }, "/auth/jwt/create");
+    return api.post({ email: email, password }, "/auth/jwt/create");
   };
 
   const logout = () => {

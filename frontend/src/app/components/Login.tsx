@@ -68,7 +68,7 @@ const Login = () => {
               <span className="text-xs text-red-600">Password is required</span>
             )}
           </div>
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center justify-center mt-4">
             <button className="px-12 py-2 leading-5 text-white transition-colors duration-200 transform bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:bg-blue-700">
               Login
             </button>
