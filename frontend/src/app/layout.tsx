@@ -1,16 +1,15 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 require('dotenv').config();
 
 const TITLE = process.env.TITLE;
 
-
 export const metadata: Metadata = {
-  title: TITLE? TITLE: "EventPass",
-  description: TITLE? TITLE + "powered by EventPass": "EventPass",
+  title: TITLE ? TITLE : 'EventPass',
+  description: TITLE ? TITLE + 'powered by EventPass' : 'EventPass',
 };
 
 export default function RootLayout({

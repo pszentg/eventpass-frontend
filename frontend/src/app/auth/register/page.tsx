@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import Register from "@/app/components/Register";
+import Register from '@/app/components/Register';
 
 export default function Home() {
   return (

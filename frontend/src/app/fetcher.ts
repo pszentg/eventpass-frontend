@@ -1,5 +1,5 @@
-import wretch, { Wretch, WretchError } from "wretch";
-import { AuthActions } from "@/app/auth/utils";
+import wretch, { Wretch, WretchError } from 'wretch';
+import { AuthActions } from '@/app/auth/utils';
 require('dotenv').config();
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -11,7 +11,7 @@ const api = () => {
   return (
     wretch(BASE_URL)
       // Initialize authentication with the access token.
-      .auth(`Bearer ${getToken("access")}`)
+      .auth(`Bearer ${getToken('access')}`)
       // Catch 401 errors to refresh the token and retry the request.
       .catcher(401, async (error: WretchError, request: Wretch) => {
         try {
@@ -21,18 +21,18 @@ const api = () => {
           };
 
           // Store the new access token.
-          storeToken(access, "access");
+          storeToken(access, 'access');
 
           // Replay the original request with the new access token.
           return request
             .auth(`Bearer ${access}`)
             .fetch()
             .unauthorized(() => {
-              window.location.replace("/");
+              window.location.replace('/');
             })
             .json();
         } catch (err) {
-          window.location.replace("/");
+          window.location.replace('/');
         }
       })
   );
