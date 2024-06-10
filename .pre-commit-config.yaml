@@ -10,6 +10,6 @@ repos:
     -   id: check-added-large-files
 
 -   repo: https://github.com/pre-commit/mirrors-eslint
-    rev: ''  # Use the sha / tag you want to point at
+    rev: v9.4.0  # Use the sha / tag you want to point at
     hooks:
     -   id: eslint

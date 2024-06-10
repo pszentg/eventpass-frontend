@@ -56,22 +56,6 @@ const Register = () => {
             )}
           </div>
           <div className="mt-4">
-            <label className="block" htmlFor="username">
-              Username
-            </label>
-            <input
-              type="text"
-              placeholder="Username"
-              {...register("username", { required: "Username is required" })}
-              className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
-            />
-            {errors.username && (
-              <span className="text-xs text-red-600">
-                {errors.username.message}
-              </span>
-            )}
-          </div>
-          <div className="mt-4">
             <label className="block" htmlFor="password">
               Password
             </label>

@@ -79,6 +79,14 @@ const Login = () => {
         </form>
         <div className="mt-6 text-center">
           <Link
+            href="/auth/register"
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Register account
+          </Link>
+        </div>
+        <div className="mt-6 text-center">
+          <Link
             href="/auth/password/reset-password"
             className="text-sm text-blue-600 hover:underline"
           >
