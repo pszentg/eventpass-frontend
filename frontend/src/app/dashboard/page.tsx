@@ -5,6 +5,7 @@ import { fetcher } from '@/app/fetcher';
 import { AuthActions } from '@/app/auth/utils';
 import { useRouter } from 'next/navigation';
 import { QRCodeSVG } from 'qrcode.react';
+import Spinner from '../components/Spinner';
 
 const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : 'http://localhost:8000';
 const ADD_GROUP_URL = `${BASE_URL}/add_to_group/`;
@@ -12,7 +13,7 @@ const ADD_GROUP_URL = `${BASE_URL}/add_to_group/`;
 export default function Home() {
   const router = useRouter();
 
-  const { data: user } = useSWR('/auth/users/me', fetcher);
+  const { data: user, isValidating } = useSWR('/auth/users/me', fetcher);
 
   const { logout, removeTokens } = AuthActions();
 
@@ -28,6 +29,10 @@ export default function Home() {
         router.push('/');
       });
   };
+
+  if (isValidating){
+    return <Spinner />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
