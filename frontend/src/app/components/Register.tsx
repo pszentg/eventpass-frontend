@@ -7,8 +7,8 @@ import Header from './Header';
 
 type FormData = {
   email: string;
-  username: string;
   password: string;
+  confirmPassword: string;
 };
 
 const Register = () => {
@@ -17,22 +17,36 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    mode: 'onChange',
+  });
 
   const router = useRouter();
 
   const { register: registerUser } = AuthActions(); // Note: Renamed to avoid naming conflict with useForm's register
 
   const onSubmit = (data: FormData) => {
-    registerUser(data.email, data.username, data.password)
+    if (data.password!== data.confirmPassword) {
+      setError('confirmPassword', { type: 'manual', message: 'Passwords do not match' });
+      return;
+    }
+
+    registerUser(data.email, data.password)
       .json(() => {
         router.push('/');
       })
       .catch((err) => {
-        setError('root', {
-          type: 'manual',
-          message: err.json.detail,
-        });
+        let errorMessage = 'Something went wrong';
+
+        if (err.json) {
+          if (err.json.email) {
+            errorMessage = err.json.email;
+          } else if (err.json.password) {
+            errorMessage = err.json.password;
+          }
+        }
+
+        setError('root', { type: 'manual', message: errorMessage });
       });
   };
 
@@ -69,7 +83,21 @@ const Register = () => {
                 <span className="text-xs text-red-600">{errors.password.message}</span>
               )}
             </div>
-            <div className="flex items-center justify-between mt-4">
+            <div className="mt-4">
+              <label className="block" htmlFor="confirmPassword">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                {...register('confirmPassword', { required: 'Confirm password is required' })}
+                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+              />
+              {errors.confirmPassword && (
+                <span className="text-xs text-red-600">{errors.confirmPassword.message}</span>
+              )}
+            </div>
+            <div className="flex items-center justify-center mt-4">
               <button className="px-12 py-2 leading-5 text-white transition-colors duration-200 transform bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:bg-blue-700">
                 Register
               </button>

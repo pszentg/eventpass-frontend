@@ -33,8 +33,8 @@ const removeTokens = () => {
   Cookies.remove('refreshToken');
 };
 
-const register = (email: string, username: string, password: string) => {
-  return api.post({ email, username, password }, '/auth/users/');
+const register = (email: string, password: string) => {
+  return api.post({ email, password }, '/auth/users/');
 };
 
 const login = (email: string, password: string) => {

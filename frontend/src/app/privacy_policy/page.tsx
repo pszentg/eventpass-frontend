@@ -105,7 +105,7 @@ const PrivacyPolicy = () => {
             kapcsolatba velünk az alábbi elérhetőségek egyikén:
           </p>
           <p>
-            <strong>E-mail:</strong> [Helyezze be az e-mail címet]
+            <strong>E-mail:</strong> info@eventpass.hu
           </p>
           <p>
             <strong>Cím:</strong> [Helyezze be a fizikai címet]
