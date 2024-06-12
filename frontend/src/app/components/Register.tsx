@@ -2,8 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthActions } from '@/app/auth/utils';
 import { useRouter } from 'next/navigation';
-import Footer from './Footer';
-import Header from './Header';
+import Header from './Navbar';
 
 type FormData = {
   email: string;
@@ -106,7 +105,6 @@ const Register = () => {
           </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

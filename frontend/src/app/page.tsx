@@ -1,6 +1,7 @@
 'use client';
 
 import Login from '@/app/components/Login';
+import React from 'react';
 
 export default function Home() {
   return (
@@ -8,4 +9,5 @@ export default function Home() {
       <Login />
     </main>
   );
+  
 }

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthActions } from '@/app/auth/utils';
 import { useSearchParams, useRouter } from 'next/navigation';
-import Footer from './Footer';
-import Header from './Header';
+import Header from './Navbar';
 type FormData = {
   password: string;
 };
@@ -66,7 +65,6 @@ const ResetPasswordConfirmation = () => {
           </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

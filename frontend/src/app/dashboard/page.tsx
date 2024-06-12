@@ -2,7 +2,6 @@
 
 import useSWR from 'swr';
 import { fetcher } from '@/app/fetcher';
-import { AuthActions } from '@/app/auth/utils';
 import { useRouter } from 'next/navigation';
 import { QRCodeSVG } from 'qrcode.react';
 import Spinner from '../components/Spinner';
@@ -10,25 +9,12 @@ import Spinner from '../components/Spinner';
 const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : 'http://localhost:8000';
 const ADD_GROUP_URL = `${BASE_URL}/add_to_group/`;
 
-export default function Home() {
+export default function Dashboard() {
   const router = useRouter();
 
   const { data: user, isValidating } = useSWR('/auth/users/me', fetcher);
+  const isClient = () => user.role === 'client';
 
-  const { logout, removeTokens } = AuthActions();
-
-  const handleLogout = () => {
-    logout()
-      .res(() => {
-        removeTokens();
-
-        router.push('/');
-      })
-      .catch(() => {
-        removeTokens();
-        router.push('/');
-      });
-  };
 
   if (isValidating){
     return <Spinner />;
@@ -45,12 +31,6 @@ export default function Home() {
           <li>Username: {user?.name}</li>
           <li>Email: {user?.email}</li>
         </ul>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors justify-center"
-        >
-          Logout
-        </button>
       </div>
     </div>
   );

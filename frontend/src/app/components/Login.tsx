@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { AuthActions } from '@/app/auth/utils';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Footer from './Footer';
 
 type FormData = {
   email: string;
@@ -89,7 +88,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
