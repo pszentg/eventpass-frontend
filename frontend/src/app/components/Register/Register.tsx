@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthActions } from '@/app/auth/utils';
 import { useRouter } from 'next/navigation';
-import Header from './Navbar';
+import Header from '../Generic/Navbar';
 
 type FormData = {
   email: string;
@@ -25,7 +25,7 @@ const Register = () => {
   const { register: registerUser } = AuthActions(); // Note: Renamed to avoid naming conflict with useForm's register
 
   const onSubmit = (data: FormData) => {
-    if (data.password!== data.confirmPassword) {
+    if (data.password !== data.confirmPassword) {
       setError('confirmPassword', { type: 'manual', message: 'Passwords do not match' });
       return;
     }

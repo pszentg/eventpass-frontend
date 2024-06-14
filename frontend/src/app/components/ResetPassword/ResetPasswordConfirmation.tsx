@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthActions } from '@/app/auth/utils';
 import { useSearchParams, useRouter } from 'next/navigation';
-import Header from './Navbar';
+import Header from '../Generic/Navbar';
 type FormData = {
   password: string;
 };

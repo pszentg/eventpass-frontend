@@ -1,6 +1,6 @@
 'use client';
 
-import ResetPassword from '@/app/components/ResetPassword';
+import ResetPassword from '@/app/components/ResetPassword/ResetPassword';
 
 export default function Home() {
   return (

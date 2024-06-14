@@ -1,5 +1,4 @@
-import React from 'react';
-import Sidenav from '../components/Generic/Sidenav';
+import Sidenav from '@/app/components/Generic/Sidenav';
 
 const DashboardLayout = ({
   children,
@@ -12,6 +11,7 @@ const DashboardLayout = ({
         EventPass
       </header>
       <div className="flex flex-col md:flex-row flex-1">
+        <p> This is an Admin UI </p>
         <aside className=" w-full md:w-40 bg-gray-400">
           <Sidenav />
         </aside>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthActions } from '@/app/auth/utils';
-import Header from './Navbar';
+import Header from '../Generic/Navbar';
 
 type FormData = {
   email: string;
@@ -41,7 +41,7 @@ const ResetPassword = () => {
               className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
             />
             {errors.email && <span className="text-xs text-red-600">Email is required</span>}
-            <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center justify-center mt-4">
               <button className="px-12 py-2 leading-5 text-white transition-colors duration-200 transform bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:bg-blue-700">
                 Send Reset Email
               </button>

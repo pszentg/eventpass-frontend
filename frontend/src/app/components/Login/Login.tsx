@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthActions } from '@/app/auth/utils';
@@ -18,7 +20,6 @@ const Login = () => {
   } = useForm<FormData>();
 
   const router = useRouter();
-
   const { login, storeToken } = AuthActions();
 
   const onSubmit = (data: FormData) => {

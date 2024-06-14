@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { fetcher } from '@/app/fetcher';
 import { useRouter } from 'next/navigation';
 import { QRCodeSVG } from 'qrcode.react';
-import Spinner from '../components/Spinner';
+import Spinner from '../components/Generic/Spinner';
 
 const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : 'http://localhost:8000';
 const ADD_GROUP_URL = `${BASE_URL}/add_to_group/`;
@@ -15,8 +15,7 @@ export default function Dashboard() {
   const { data: user, isValidating } = useSWR('/auth/users/me', fetcher);
   const isClient = () => user.role === 'client';
 
-
-  if (isValidating){
+  if (isValidating) {
     return <Spinner />;
   }
 

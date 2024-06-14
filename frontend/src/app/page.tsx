@@ -1,6 +1,6 @@
 'use client';
 
-import Login from '@/app/components/Login';
+import Login from '@/app/components/Login/Login';
 import React from 'react';
 
 export default function Home() {
@@ -9,5 +9,4 @@ export default function Home() {
       <Login />
     </main>
   );
-  
 }
