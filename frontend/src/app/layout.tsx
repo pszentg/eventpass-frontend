@@ -6,7 +6,7 @@ import Footer from './components/Generic/Footer';
 const inter = Inter({ subsets: ['latin'] });
 require('dotenv').config();
 
-const TITLE = process.env.TITLE;
+const TITLE = process.env.NEXT_PUBLIC_TITLE;
 
 export const metadata: Metadata = {
   title: TITLE ? TITLE : 'EventPass',
