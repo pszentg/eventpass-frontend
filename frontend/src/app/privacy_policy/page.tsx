@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../components/Navbar';
+import Header from '../components/Common/Navbar';
 
 const PrivacyPolicy = () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidenav from '../components/Generic/Sidenav';
+import Sidenav from '../components/Common/Sidenav';
 
 const DashboardLayout = ({
   children,

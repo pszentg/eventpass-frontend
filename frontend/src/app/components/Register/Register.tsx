@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthActions } from '@/app/auth/utils';
 import { useRouter } from 'next/navigation';
-import Header from '../Generic/Navbar';
+import Header from '../Common/Navbar';
 
 type FormData = {
   email: string;

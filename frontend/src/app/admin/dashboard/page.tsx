@@ -1,4 +1,4 @@
-import Sidenav from '@/app/components/Generic/Sidenav';
+import Sidenav from '@/app/components/Common/Sidenav';
 
 const DashboardLayout = ({
   children,
