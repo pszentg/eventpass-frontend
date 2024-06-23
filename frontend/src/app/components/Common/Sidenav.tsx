@@ -3,7 +3,7 @@
 import { AuthActions } from '@/app/auth/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useContext } from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 
 const Sidenav = () => {
