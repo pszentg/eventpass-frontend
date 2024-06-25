@@ -1,13 +1,14 @@
 import { useRouter } from "next/navigation";
 import styles from "./Sidenav.module.css";
+import Cookies from "js-cookie";
 
 const Sidenav = () => {
   const router = useRouter();
 
   const handleLogout = () => {
     // Clear tokens and user data
-    localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
+    Cookies.remove("access");
+    Cookies.remove("refresh");
     router.push("/");
   };
 

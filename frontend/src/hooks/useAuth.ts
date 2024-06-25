@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import wretch from 'wretch';
+import Cookies from 'js-cookie';
 import UserContext from '../context/UserContext';
 
 const useAuth = () => {
@@ -18,9 +19,9 @@ const useAuth = () => {
 
       const { access, refresh } = response;
 
-      // Store tokens in local storage
-      localStorage.setItem('access', access);
-      localStorage.setItem('refresh', refresh);
+      // Store tokens in cookies
+      Cookies.set('access', access, { secure: true, sameSite: 'strict' });
+      Cookies.set('refresh', refresh, { secure: true, sameSite: 'strict' });
 
       // Fetch the user object
       const userResponse = await wretch(`${BASE_URL}/auth/users/me/`)
@@ -50,7 +51,26 @@ const useAuth = () => {
     }
   };
 
-  return { login, register, error };
+  const validateToken = async () => {
+    const token = Cookies.get('access');
+    if (!token) return false;
+
+    try {
+      // Attempt to fetch user data with the token
+      const userResponse = await wretch(`${BASE_URL}/auth/users/me/`)
+        .auth(`Bearer ${token}`)
+        .get()
+        .json();
+      
+      // If successful, store user in context
+      setUser(userResponse);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  return { login, register, validateToken, error };
 };
 
 export default useAuth;
