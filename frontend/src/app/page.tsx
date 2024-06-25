@@ -14,7 +14,7 @@ const HomePage = () => {
       const role = await validateToken();
       if (role) {
         if (role === "client") {
-          router.push("/admin-dashboard");
+          router.push("/admin/dashboard");
         } else {
           router.push("/dashboard");
         }

@@ -1,12 +1,9 @@
 import { useRouter } from "next/navigation";
-import styles from "./Sidenav.module.css";
 import Cookies from "js-cookie";
-import UserContext from "@/context/UserContext";
-import { useContext } from "react";
+import styles from "./Sidenav.module.css";
 
-const Sidenav = () => {
+const UserSidenav = () => {
   const router = useRouter();
-  const { user } = useContext(UserContext);
 
   const handleLogout = () => {
     // Clear tokens and user data
@@ -21,11 +18,6 @@ const Sidenav = () => {
         <li className={styles.navItem}>
           <a href="/dashboard">Dashboard</a>
         </li>
-        {user && user.role === "client" && (
-          <li className={styles.navItem}>
-            <a href="/admin-dashboard">Admin Dashboard</a>
-          </li>
-        )}
         <li className={styles.navItem}>
           <a href="/profile">Profile</a>
         </li>
@@ -40,4 +32,4 @@ const Sidenav = () => {
   );
 };
 
-export default Sidenav;
+export default UserSidenav;

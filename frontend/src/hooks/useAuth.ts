@@ -34,7 +34,7 @@ const useAuth = () => {
 
       // Redirect based on role
       if (userResponse.role === 'client') {
-        router.push('/admin-dashboard');
+        router.push('/admin/dashboard');
       } else {
         router.push('/dashboard');
       }
