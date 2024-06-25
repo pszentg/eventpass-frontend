@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthActions } from '@/app/auth/utils';
 import { useRouter } from 'next/navigation';
@@ -10,6 +10,8 @@ type FormData = {
   email: string;
   password: string;
 };
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const Login = () => {
   const {
@@ -22,13 +24,11 @@ const Login = () => {
   const router = useRouter();
   const { login, storeToken } = AuthActions();
 
-  const onSubmit = (data: FormData) => {
-    login(data.email, data.password)
+  const onSubmit = async (data: FormData) => {
+    await login(data.email, data.password)
       .json((json) => {
         storeToken(json.access, 'access');
         storeToken(json.refresh, 'refresh');
-
-        router.push('dashboard');
       })
       .catch((err) => {
         setError('root', { type: 'manual', message: err.json.detail });

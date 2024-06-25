@@ -13,7 +13,21 @@ const api = wretch(BASE_URL).accept('application/json');
  * @param {"access" | "refresh"} type - The type of the token (access or refresh).
  */
 const storeToken = (token: string, type: 'access' | 'refresh') => {
-  Cookies.set(type + 'Token', token);
+  // Set HttpOnly flag to prevent client-side scripts from accessing the cookie
+  // const httpOnly = true;
+
+  // Set Secure flag if the application is served over HTTPS
+  const secure = window.location.protocol === 'https:';
+
+  // Set expiration time for the access token cookie (e.g., 15 minutes)
+  const expires = 15;
+
+  // Set the cookie
+  Cookies.set(type + 'Token', token, {
+    expires,
+    // httpOnly,
+    secure,
+  });
 };
 
 /**

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Footer from './components/Common/Footer';
+import { UserProvider } from './context/UserContext';
 
 const inter = Inter({ subsets: ['latin'] });
 require('dotenv').config();
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <UserProvider>{children}</UserProvider>
         <Footer />
       </body>
     </html>

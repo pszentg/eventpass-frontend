@@ -1,21 +1,17 @@
 'use client';
 
-import useSWR from 'swr';
-import { fetcher } from '@/app/fetcher';
-import { useRouter } from 'next/navigation';
 import { QRCodeSVG } from 'qrcode.react';
-import Spinner from '../components/Generic/Spinner';
+import React, { useContext } from 'react';
+import Spinner from '../components/Common/Spinner';
+import { UserContext } from '../context/UserContext';
 
 const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL : 'http://localhost:8000';
 const ADD_GROUP_URL = `${BASE_URL}/add_to_group/`;
 
 export default function Dashboard() {
-  const router = useRouter();
+  const { user, isLoading, isValidating } = useContext(UserContext);
 
-  const { data: user, isValidating } = useSWR('/auth/users/me', fetcher);
-  const isClient = () => user.role === 'client';
-
-  if (isValidating) {
+  if (isLoading || isValidating) {
     return <Spinner />;
   }
 
