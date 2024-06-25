@@ -1,12 +1,11 @@
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
-import UserContext from "@/context/UserContext";
+import { useUserContext } from "@/context/UserContext";
 import Cookies from "js-cookie";
 import styles from "./Sidenav.module.css";
 
 const AdminSidenav = () => {
   const router = useRouter();
-  const { user } = useContext(UserContext);
+  const { user } = useUserContext();
 
   const handleLogout = () => {
     // Clear tokens and user data

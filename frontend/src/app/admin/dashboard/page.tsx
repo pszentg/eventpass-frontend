@@ -1,10 +1,9 @@
 "use client";
-import { useContext } from "react";
-import UserContext from "@/context/UserContext";
+import { useUserContext } from "@/context/UserContext";
 import styles from "./dashboard.module.css";
 
 const AdminDashboard = () => {
-  const { user } = useContext(UserContext);
+  const { user } = useUserContext();
 
   return (
     <div className={styles.container}>

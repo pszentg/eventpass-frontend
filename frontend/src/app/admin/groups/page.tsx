@@ -1,26 +1,23 @@
 "use client";
-import { useContext } from "react";
-import UserContext from "@/context/UserContext";
-import ManageGroups from "@/components/ManageGroups/ManageGroups";
+import ManageGroups from "../../../components/ManageGroups/ManageGroups";
 import styles from "./groups.module.css";
+import { useUserContext } from "../../../context/UserContext";
 
 const AdminGroups = () => {
-  const { user } = useContext(UserContext);
+  const { user } = useUserContext();
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <h1>Manage Groups</h1>
-        {user ? (
-          <div>
-            <p>Welcome, {user.name}</p>
-            <p>Your role: {user.role}</p>
-            <ManageGroups />
-          </div>
-        ) : (
-          <p>Loading user information...</p>
-        )}
-      </div>
+    <div className={styles.content}>
+      <h1>Manage Groups</h1>
+      {user ? (
+        <div>
+          <p>Welcome, {user.name}</p>
+          <p>Your role: {user.role}</p>
+          <ManageGroups />
+        </div>
+      ) : (
+        <p>Loading user information...</p>
+      )}
     </div>
   );
 };
