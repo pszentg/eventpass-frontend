@@ -1,23 +1,17 @@
 "use client";
 import { useContext } from "react";
 import UserContext from "../../context/UserContext";
+import UserInfo from "../../components/UserInfo/UserInfo";
+import styles from "./Dashboard.module.css";
 
-const DashboardPage = () => {
+const Dashboard = () => {
   const { user } = useContext(UserContext);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      {user ? (
-        <div>
-          <p>Welcome, {user.email}!</p>
-          {/* Add more user-specific content here */}
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+    <div className={styles.container}>
+      {user ? <UserInfo user={user} /> : <p>Loading user information...</p>}
     </div>
   );
 };
 
-export default DashboardPage;
+export default Dashboard;
