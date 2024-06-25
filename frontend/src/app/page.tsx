@@ -11,9 +11,13 @@ const HomePage = () => {
 
   useEffect(() => {
     const checkToken = async () => {
-      const isValid = await validateToken();
-      if (isValid) {
-        router.push("/dashboard");
+      const role = await validateToken();
+      if (role) {
+        if (role === "client") {
+          router.push("/admin-dashboard");
+        } else {
+          router.push("/dashboard");
+        }
       }
     };
     checkToken();

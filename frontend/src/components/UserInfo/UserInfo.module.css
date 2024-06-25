@@ -1,4 +1,3 @@
-/* src/components/UserInfo/UserInfo.module.css */
 .userInfo {
   background: white;
   padding: 20px;
@@ -21,4 +20,10 @@
   margin: 10px 0;
   font-size: 16px;
   color: #666;
+}
+
+.qrCode {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }

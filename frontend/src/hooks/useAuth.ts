@@ -32,8 +32,12 @@ const useAuth = () => {
       // Store user in context
       setUser(userResponse);
 
-      // Redirect to the home page or dashboard
-      router.push('/dashboard');
+      // Redirect based on role
+      if (userResponse.role === 'client') {
+        router.push('/admin-dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error) {
       setError('Invalid credentials. Please try again.');
     }
@@ -64,7 +68,7 @@ const useAuth = () => {
       
       // If successful, store user in context
       setUser(userResponse);
-      return true;
+      return userResponse.role;
     } catch {
       return false;
     }

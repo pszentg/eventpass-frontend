@@ -1,7 +1,7 @@
 "use client";
 import { useState, FormEvent } from "react";
 import useAuth from "../../hooks/useAuth";
-import styles from "./Register.module.css";
+import styles from "./register.module.css";
 
 const Register = () => {
   const [email, setEmail] = useState<string>("");
