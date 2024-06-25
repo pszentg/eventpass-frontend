@@ -1,7 +1,6 @@
 "use client";
 import { useContext } from "react";
 import UserContext from "@/context/UserContext";
-import AdminSidenav from "@/components/Common/Sidenav/AdminSidenav";
 import styles from "./dashboard.module.css";
 
 const AdminDashboard = () => {
@@ -9,7 +8,6 @@ const AdminDashboard = () => {
 
   return (
     <div className={styles.container}>
-      <AdminSidenav />
       <div className={styles.content}>
         <h1>Admin Dashboard</h1>
         {user ? (
