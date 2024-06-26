@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import wretch from 'wretch';
 import Cookies from 'js-cookie';
-import UserContext from '../context/UserContext';
+import UserContext from '@/context/UserContext';
 
 const useAuth = () => {
   const [error, setError] = useState<string>('');
@@ -49,32 +49,13 @@ const useAuth = () => {
         .post({ email, password })
         .res();
 
-      router.push('/login');
+      router.push('/');
     } catch (error) {
       setError('Registration failed. Please try again.');
     }
   };
 
-  const validateToken = async () => {
-    const token = Cookies.get('access');
-    if (!token) return false;
-
-    try {
-      // Attempt to fetch user data with the token
-      const userResponse = await wretch(`${BASE_URL}/auth/users/me/`)
-        .auth(`Bearer ${token}`)
-        .get()
-        .json();
-      
-      // If successful, store user in context
-      setUser(userResponse);
-      return userResponse.role;
-    } catch {
-      return false;
-    }
-  };
-
-  return { login, register, validateToken, error };
+  return { login, register, error };
 };
 
 export default useAuth;

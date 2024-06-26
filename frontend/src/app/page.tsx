@@ -4,16 +4,16 @@ import { useRouter } from "next/navigation";
 import useAuth from "../hooks/useAuth";
 import Login from "../components/Login/Login";
 import styles from "./home.module.css";
+import useUserValidation from "@/hooks/useUserValidation";
 
 const HomePage = () => {
-  const { validateToken } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     const checkToken = async () => {
-      const role = await validateToken();
-      if (role) {
-        if (role === "client") {
+      const { user, isValidating, error } = useUserValidation();
+      if (user.role) {
+        if (user.role === "client") {
           router.push("/admin/dashboard");
         } else {
           router.push("/dashboard");
@@ -21,7 +21,7 @@ const HomePage = () => {
       }
     };
     checkToken();
-  }, [validateToken, router]);
+  }, [useUserValidation, router]);
 
   return (
     <div className={styles.container}>

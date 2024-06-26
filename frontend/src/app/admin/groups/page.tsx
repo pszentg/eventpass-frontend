@@ -16,7 +16,7 @@ const AdminGroups = () => {
           <ManageGroups />
         </div>
       ) : (
-        <p>Loading user information...</p>
+        <p>Loading group information...</p>
       )}
     </div>
   );
