@@ -1,16 +1,16 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import Footer from './components/Common/Footer';
-
-const inter = Inter({ subsets: ['latin'] });
-require('dotenv').config();
-
-const TITLE = process.env.NEXT_PUBLIC_TITLE;
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { UserProvider } from "../context/UserContext";
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: TITLE ? TITLE : 'EventPass',
-  description: TITLE ? TITLE + 'powered by EventPass' : 'EventPass',
+  title: process.env.NEXT_PUBLIC_TITLE
+    ? process.env.NEXT_PUBLIC_TITLE
+    : "EventPass",
+  description: process.env.NEXT_PUBLIC_TITLE
+    ? process.env.NEXT_PUBLIC_TITLE + " powered by EventPass"
+    : "EventPass",
 };
 
 export default function RootLayout({
@@ -20,9 +20,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {children}
-        <Footer />
+      <body>
+        <UserProvider>{children}</UserProvider>
       </body>
     </html>
   );

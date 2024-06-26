@@ -1,24 +1,26 @@
-import Sidenav from '@/app/components/Common/Sidenav';
+"use client";
+import { useUserContext } from "@/context/UserContext";
+import styles from "./dashboard.module.css";
 
-const DashboardLayout = ({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) => {
+const AdminDashboard = () => {
+  const { user } = useUserContext();
+
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-gray-200 sticky top-0 h-14 flex justify-left items-left text-center font-semibold">
-        EventPass
-      </header>
-      <div className="flex flex-col md:flex-row flex-1">
-        <p> This is an Admin UI </p>
-        <aside className=" w-full md:w-40 bg-gray-400">
-          <Sidenav />
-        </aside>
-        <main className="flex-1">{children}</main>
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <h1>Admin Dashboard</h1>
+        {user ? (
+          <div>
+            <p>Welcome, {user.name}</p>
+            <p>Your role: {user.role}</p>
+            {/* Add more admin-specific components here */}
+          </div>
+        ) : (
+          <p>Loading user information...</p>
+        )}
       </div>
     </div>
   );
 };
 
-export default DashboardLayout;
+export default AdminDashboard;

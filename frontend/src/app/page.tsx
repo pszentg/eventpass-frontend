@@ -1,12 +1,33 @@
-'use client';
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import useAuth from "../hooks/useAuth";
+import Login from "../components/Login/Login";
+import styles from "./home.module.css";
+import useUserValidation from "@/hooks/useUserValidation";
 
-import Login from '@/app/components/Login/Login';
-import React from 'react';
+const HomePage = () => {
+  const router = useRouter();
 
-export default function Home() {
+  useEffect(() => {
+    const checkToken = async () => {
+      const { user, isValidating, error } = useUserValidation();
+      if (user.role) {
+        if (user.role === "client") {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/dashboard");
+        }
+      }
+    };
+    checkToken();
+  }, [useUserValidation, router]);
+
   return (
-    <main>
+    <div className={styles.container}>
       <Login />
-    </main>
+    </div>
   );
-}
+};
+
+export default HomePage;
