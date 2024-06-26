@@ -1,7 +1,7 @@
 "use client";
-import ManageGroups from "../../../components/ManageGroups/ManageGroups";
+import ManageGroups from "@/components/ManageGroups/ManageGroups";
 import styles from "./groups.module.css";
-import { useUserContext } from "../../../context/UserContext";
+import { useUserContext } from "@/context/UserContext";
 
 const AdminGroups = () => {
   const { user } = useUserContext();

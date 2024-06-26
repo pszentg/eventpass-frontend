@@ -1,8 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import useAuth from "../hooks/useAuth";
-import Login from "../components/Login/Login";
+import Login from "@/components/Login/Login";
 import styles from "./home.module.css";
 import useUserValidation from "@/hooks/useUserValidation";
 

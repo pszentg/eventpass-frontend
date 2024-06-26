@@ -2,7 +2,7 @@
 import React from "react";
 import styles from "./privacy-policy.module.css";
 import { useRouter } from "next/navigation";
-import Navbar from "../../components/Common/Navbar/Navbar";
+import Navbar from "@/components/Common/Navbar/Navbar";
 
 const PrivacyPolicy = () => {
   const router = useRouter();

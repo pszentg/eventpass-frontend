@@ -1,6 +1,6 @@
 "use client";
 import { useState, FormEvent } from "react";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
 import styles from "./register.module.css";
 
 const Register = () => {
