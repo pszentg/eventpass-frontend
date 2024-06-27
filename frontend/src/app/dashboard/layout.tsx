@@ -1,24 +1,48 @@
 "use client";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 import UserSidenav from "@/components/Common/Sidenav/UserSidenav";
 import styles from "./layout.module.css";
-import { useRouter } from "next/navigation";
-import useUserValidation from "@/hooks/useUserValidation";
+import useSWR from "swr";
+import { fetcher } from "../auth/fetcher";
+import UserContext from "@/context/UserContext";
 
-const ClientDashboardLayout = ({ children }: { children: ReactNode }) => {
-  const router = useRouter();
-  const { user, isValidating, error } = useUserValidation();
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const ClientDashboardLayout = ({ children }: LayoutProps) => {
+  const {
+    data: fetchedUser,
+    error,
+    isValidating,
+  } = useSWR<User>("/auth/users/me", fetcher);
+
+  const context = useContext(UserContext);
+
+  if (!context) {
+    throw new Error("UserLayout must be used within a UserProvider");
+  }
+
+  const { user, setUser } = context;
 
   useEffect(() => {
-    if (error) {
-      router.push("/");
-    } else if (user && user.role !== "client") {
-      router.push("/dashboard");
+    if (fetchedUser) {
+      setUser(fetchedUser);
     }
-  }, [user, error, router]);
-
+  }, [fetchedUser, setUser]);
   if (isValidating) {
-    return <div className={styles.spinner}>Loading...</div>; // Add your spinner component or styling here
+    return <div>Loading...</div>; // Replace with your spinner component
+  }
+
+  if (error) {
+    return <div>Error loading user data</div>; // Handle error appropriately
   }
 
   return (

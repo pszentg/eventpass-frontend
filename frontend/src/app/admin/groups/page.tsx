@@ -1,10 +1,11 @@
 "use client";
 import ManageGroups from "@/components/ManageGroups/ManageGroups";
 import styles from "./groups.module.css";
-import { useUserContext } from "@/context/UserContext";
+import UserContext from "@/context/UserContext";
+import { useContext } from "react";
 
 const AdminGroups = () => {
-  const { user } = useUserContext();
+  const user = useContext(UserContext);
 
   return (
     <div className={styles.content}>
