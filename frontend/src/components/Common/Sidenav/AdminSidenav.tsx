@@ -32,9 +32,16 @@ const AdminSidenav = () => {
         <li className={styles.navItem}>
           <a href="/admin/settings">Settings</a>
         </li>
-        <a href="/admin/groups" className={styles.navItem}>
-          Manage Groups
-        </a>
+        <li>
+          <a href="/admin/groups" className={styles.navItem}>
+            Manage Groups
+          </a>
+        </li>
+        <li>
+          <a href="/admin/events" className={styles.navItem}>
+            Manage Events
+          </a>
+        </li>
       </ul>
       <button onClick={handleLogout} className={styles.logoutButton}>
         Logout
