@@ -59,7 +59,7 @@ export default function SettingsPage() {
       await mutate(
         async () => {
           const response = await wretch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/auth/users/me`
+            `${process.env.NEXT_PUBLIC_BASE_URL}/auth/users/me/`
           )
             .auth(`Bearer ${token}`) // Use .auth() to set the Bearer token
             .put({
