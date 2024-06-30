@@ -1,23 +1,29 @@
 "use client";
-import { useUserContext } from "@/context/UserContext";
+import UserContext from "@/context/UserContext";
 import styles from "./dashboard.module.css";
+import { useContext } from "react";
 
 const AdminDashboard = () => {
-  const { user } = useUserContext();
+  const context = useContext(UserContext);
+
+  if (!context) {
+    throw new Error("AdminDashboard must be used within a UserProvider");
+  }
+
+  const { user } = context;
+
+  if (!user) {
+    return <p>Loading user information...</p>;
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         <h1>Admin Dashboard</h1>
-        {user ? (
-          <div>
-            <p>Welcome, {user.name}</p>
-            <p>Your role: {user.role}</p>
-            {/* Add more admin-specific components here */}
-          </div>
-        ) : (
-          <p>Loading user information...</p>
-        )}
+        <div>
+          <p>Welcome, {user.name}</p>
+          <p>Your role: {user.role}</p>
+        </div>
       </div>
     </div>
   );

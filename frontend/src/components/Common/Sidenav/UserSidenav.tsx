@@ -1,15 +1,21 @@
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import styles from "./Sidenav.module.css";
+import { AuthActions } from "@/app/auth/utils";
 
 const UserSidenav = () => {
   const router = useRouter();
+  const { logout, removeTokens } = AuthActions();
 
   const handleLogout = () => {
-    // Clear tokens and user data
-    Cookies.remove("access");
-    Cookies.remove("refresh");
-    router.push("/");
+    logout()
+      .res(() => {
+        removeTokens();
+        router.push("/");
+      })
+      .catch(() => {
+        removeTokens();
+        router.push("/");
+      });
   };
 
   return (

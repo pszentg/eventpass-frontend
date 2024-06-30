@@ -1,17 +1,24 @@
 import { useRouter } from "next/navigation";
-import { useUserContext } from "@/context/UserContext";
-import Cookies from "js-cookie";
 import styles from "./Sidenav.module.css";
+import { useContext } from "react";
+import UserContext from "@/context/UserContext";
+import { AuthActions } from "@/app/auth/utils";
 
 const AdminSidenav = () => {
   const router = useRouter();
-  const { user } = useUserContext();
+  const user = useContext(UserContext);
+  const { logout, removeTokens } = AuthActions();
 
   const handleLogout = () => {
-    // Clear tokens and user data
-    Cookies.remove("access");
-    Cookies.remove("refresh");
-    router.push("/");
+    logout()
+      .res(() => {
+        removeTokens();
+        router.push("/");
+      })
+      .catch(() => {
+        removeTokens();
+        router.push("/");
+      });
   };
 
   return (

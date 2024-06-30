@@ -1,16 +1,16 @@
 "use client";
 import { useState, FormEvent } from "react";
-import useAuth from "@/hooks/useAuth";
 import styles from "./register.module.css";
+import { AuthActions } from "../auth/utils";
 
 const Register = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { register, error } = useAuth();
+  const { register } = AuthActions();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    await register(email, password);
+    register(email, password);
   };
 
   return (
@@ -36,7 +36,6 @@ const Register = () => {
               required
             />
           </div>
-          {error && <p className={styles.error}>{error}</p>}
           <button type="submit" className={styles.button}>
             Register
           </button>

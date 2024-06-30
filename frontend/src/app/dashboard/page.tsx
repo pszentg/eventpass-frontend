@@ -1,10 +1,21 @@
 "use client";
-import { useUserContext } from "@/context/UserContext";
 import UserInfo from "@/components/UserInfo/UserInfo";
 import styles from "./dashboard.module.css";
+import { useContext } from "react";
+import UserContext from "@/context/UserContext";
 
 const Dashboard = () => {
-  const { user } = useUserContext();
+  const context = useContext(UserContext);
+
+  if (!context) {
+    throw new Error("Dashboard must be used within a UserProvider");
+  }
+
+  const { user } = context;
+
+  if (!user) {
+    return <p>Loading user information...</p>;
+  }
 
   return (
     <div className={styles.container}>
