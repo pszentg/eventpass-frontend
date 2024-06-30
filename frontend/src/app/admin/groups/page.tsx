@@ -6,6 +6,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import wretch from "wretch";
 import styles from "./groups.module.css";
+import Link from "next/link";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -62,33 +63,10 @@ const GroupsPage = () => {
       <ul className={styles.list}>
         {groups.map((group) => (
           <li key={group.id} className={styles.item}>
-            {editingGroup && editingGroup.id === group.id ? (
-              <input
-                className={styles.input}
-                value={editingGroup.name}
-                onChange={(e) =>
-                  setEditingGroup({ ...editingGroup, name: e.target.value })
-                }
-              />
-            ) : (
-              <span className={styles.name}>{group.name}</span>
-            )}
-
-            {editingGroup && editingGroup.id === group.id ? (
-              <button
-                className={styles.button}
-                onClick={() => updateGroup(editingGroup)}
-              >
-                Save
-              </button>
-            ) : (
-              <button
-                className={styles.button}
-                onClick={() => setEditingGroup(group)}
-              >
-                Edit
-              </button>
-            )}
+            <span className={styles.name}>{group.name}</span>
+            <Link href={`/admin/groups/${group.id}`}>
+              <div className={styles.button}>Edit</div>
+            </Link>
             <button
               className={styles.button}
               onClick={() => deleteGroup(group.id)}

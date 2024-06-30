@@ -1,8 +1,27 @@
 /* groups.module.css */
 .container {
   padding: 20px;
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+
+.header {
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px; /* Add spacing below the header */
+  border-bottom: 2px solid #ddd; /* Add a border to emphasize the header */
+  padding-bottom: 10px; /* Add padding to the bottom of the header */
+}
+
+.subheader {
+  padding-top: 20px;
+  color: #333;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px; /* Add spacing below the subheader */
 }
 
 .list {
@@ -72,4 +91,12 @@
 
 .addButton:hover {
   background-color: #218838;
+}
+
+.error {
+  color: red;
+}
+
+.loading {
+  color: #0070f3;
 }
