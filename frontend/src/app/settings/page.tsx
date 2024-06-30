@@ -6,6 +6,7 @@ import wretch from "wretch";
 import UserContext from "@/context/UserContext";
 import { AuthActions } from "../auth/utils"; // Import AuthActions
 import styles from "./settings.module.css";
+import EventAdminSettings from "@/components/EventAdmin/Settings";
 
 interface User {
   id: string;
@@ -114,6 +115,7 @@ export default function SettingsPage() {
           Save Settings
         </button>
       </form>
+      {user?.role === "admin" && <EventAdminSettings />}
     </div>
   );
 }

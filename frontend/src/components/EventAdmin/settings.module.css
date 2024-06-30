@@ -1,0 +1,31 @@
+/* /src/app/components/EventAdmin/settings.module.css */
+
+.adminSettings {
+    margin-top: 3rem; /* Increased margin to create more spacing */
+  }
+  
+  .adminSettings h2 {
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+  
+  .divider {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    margin-bottom: 1rem;
+  }
+  
+  .field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    padding: 8px;
+  }
+  
+  .field select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  

@@ -59,3 +59,15 @@
 .settings .saveButton {
   margin-top: 1rem;
 }
+
+.adminSettings {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.adminSettings h2 {
+  margin-bottom: 1rem;
+}
