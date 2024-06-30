@@ -56,6 +56,7 @@ const GroupDetailPage = () => {
       .auth(`Bearer ${token}`)
       .put({ name: groupName })
       .res();
+    setIsEditing(false);
     mutateGroup();
   };
 

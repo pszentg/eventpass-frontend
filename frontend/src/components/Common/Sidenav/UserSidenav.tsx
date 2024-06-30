@@ -2,7 +2,7 @@ import { useRouter } from "next/navigation";
 import styles from "./Sidenav.module.css";
 import { AuthActions } from "@/app/auth/utils";
 
-const UserSidenav = () => {
+const UserSidenav = ({ user }) => {
   const router = useRouter();
   const { logout, removeTokens } = AuthActions();
 
@@ -33,6 +33,7 @@ const UserSidenav = () => {
           <a href="/settings">Settings</a>
         </li>
       </ul>
+
       <button onClick={handleLogout} className={styles.logoutButton}>
         Logout
       </button>

@@ -6,7 +6,6 @@ import { AuthActions } from "@/app/auth/utils";
 
 const AdminSidenav = () => {
   const router = useRouter();
-  const user = useContext(UserContext);
   const { logout, removeTokens } = AuthActions();
 
   const handleLogout = () => {
