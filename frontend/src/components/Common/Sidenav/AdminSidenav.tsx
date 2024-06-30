@@ -13,12 +13,10 @@ const AdminSidenav = () => {
     logout()
       .res(() => {
         removeTokens();
-        logout();
         router.push("/");
       })
       .catch(() => {
         removeTokens();
-        logout();
         router.push("/");
       });
   };
