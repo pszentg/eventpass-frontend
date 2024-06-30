@@ -1,13 +1,75 @@
-/* src/app/admin/groups/groups.module.css */
+/* groups.module.css */
 .container {
-    display: flex;
-    height: 100vh; /* Ensure the container takes up the full viewport height */
-  }
-  
-  .content {
-    flex-grow: 1; /* Ensure the content takes up remaining space */
-    padding: 20px;
-    background-color: #f7f7f7;
-    overflow-y: auto; /* Allow scrolling if content overflows */
-  }
-  
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.name {
+  font-size: 16px;
+  flex-grow: 1;
+}
+
+.input {
+  padding: 5px;
+  font-size: 16px;
+  margin-right: 10px;
+  flex-grow: 1;
+}
+
+.button {
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-left: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: #0070f3;
+  color: white;
+  border-radius: 3px;
+}
+
+.button:hover {
+  background-color: #005bb5;
+}
+
+.addContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.addInput {
+  padding: 10px;
+  font-size: 16px;
+  margin-right: 10px;
+  flex-grow: 1;
+}
+
+.addButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  border-radius: 3px;
+}
+
+.addButton:hover {
+  background-color: #218838;
+}

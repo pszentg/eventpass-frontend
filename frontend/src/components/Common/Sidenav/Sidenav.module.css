@@ -48,3 +48,11 @@
 .logoutButton:hover {
   background-color: #ff3b2f;
 }
+
+.addButton {
+  margin: 10px 0;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

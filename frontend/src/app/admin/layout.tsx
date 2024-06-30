@@ -1,3 +1,4 @@
+// components/Admin/AdminLayout.tsx
 "use client";
 import { ReactNode, useContext, useEffect } from "react";
 import AdminSidenav from "@/components/Common/Sidenav/AdminSidenav";
@@ -34,10 +35,6 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
 
   if (error) {
     return <div>Error loading user data</div>; // Handle error appropriately
-  }
-
-  if (isValidating) {
-    return <div className={styles.spinner}>Loading...</div>; // Add your spinner component or styling here
   }
 
   return (
