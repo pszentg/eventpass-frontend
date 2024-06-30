@@ -27,9 +27,6 @@ const AdminSidenav = () => {
           <a href="/admin/dashboard">Admin Dashboard</a>
         </li>
         <li className={styles.navItem}>
-          <a href="/admin/profile">Profile</a>
-        </li>
-        <li className={styles.navItem}>
           <a href="/admin/settings">Settings</a>
         </li>
         <li>

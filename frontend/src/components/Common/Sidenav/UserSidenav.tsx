@@ -1,8 +1,11 @@
 import { useRouter } from "next/navigation";
 import styles from "./Sidenav.module.css";
 import { AuthActions } from "@/app/auth/utils";
+import UserContext from "@/context/UserContext";
+import { useContext } from "react";
 
-const UserSidenav = ({ user }) => {
+const UserSidenav = () => {
+  const user = useContext(UserContext);
   const router = useRouter();
   const { logout, removeTokens } = AuthActions();
 
@@ -10,12 +13,10 @@ const UserSidenav = ({ user }) => {
     logout()
       .res(() => {
         removeTokens();
-        logout();
         router.push("/");
       })
       .catch(() => {
         removeTokens();
-        logout();
         router.push("/");
       });
   };
@@ -25,9 +26,6 @@ const UserSidenav = ({ user }) => {
       <ul className={styles.navList}>
         <li className={styles.navItem}>
           <a href="/dashboard">Dashboard</a>
-        </li>
-        <li className={styles.navItem}>
-          <a href="/profile">Profile</a>
         </li>
         <li className={styles.navItem}>
           <a href="/settings">Settings</a>

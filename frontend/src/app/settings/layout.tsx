@@ -1,3 +1,4 @@
+"use client";
 import { User } from "@/types";
 import { ReactNode, useContext, useEffect } from "react";
 import useSWR from "swr";
@@ -32,11 +33,11 @@ const SettingsLayout = ({ children }: LayoutProps) => {
   }, [fetchedUser, setUser]);
 
   if (isValidating) {
-    return <div>Loading...</div>; // Replace with your spinner component
+    return <div className={styles.spinner}>Loading...</div>; // Replace with your spinner component
   }
 
   if (error) {
-    return <div>Error loading user data</div>; // Handle error appropriately
+    return <div className={styles.spinner}>Error loading user data</div>; // Handle error appropriately
   }
 
   return (
