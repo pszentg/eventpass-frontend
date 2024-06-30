@@ -1,0 +1,25 @@
+/* /styles/settings.module.css */
+
+.settings {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .settings form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .settings label {
+    margin: 0.5rem 0 0.2rem;
+  }
+  
+  .settings input {
+    margin-bottom: 1rem;
+  }
+  
+  .settings button {
+    align-self: flex-start;
+  }
+  

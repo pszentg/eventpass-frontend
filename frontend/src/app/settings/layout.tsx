@@ -1,17 +1,16 @@
-"use client";
+import { User } from "@/types";
 import { ReactNode, useContext, useEffect } from "react";
-import UserSidenav from "@/components/Common/Sidenav/UserSidenav";
-import styles from "./layout.module.css";
 import useSWR from "swr";
 import { fetcher } from "../auth/fetcher";
 import UserContext from "@/context/UserContext";
-import { User } from "@/types";
+import UserSidenav from "@/components/Common/Sidenav/UserSidenav";
+import styles from "./layout.module.css";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const ClientDashboardLayout = ({ children }: LayoutProps) => {
+const SettingsLayout = ({ children }: LayoutProps) => {
   const {
     data: fetchedUser,
     error,
@@ -31,6 +30,7 @@ const ClientDashboardLayout = ({ children }: LayoutProps) => {
       setUser(fetchedUser);
     }
   }, [fetchedUser, setUser]);
+
   if (isValidating) {
     return <div>Loading...</div>; // Replace with your spinner component
   }
@@ -47,4 +47,4 @@ const ClientDashboardLayout = ({ children }: LayoutProps) => {
   );
 };
 
-export default ClientDashboardLayout;
+export default SettingsLayout;

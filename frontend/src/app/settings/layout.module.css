@@ -1,0 +1,22 @@
+/* src/app/dashboard/layout.module.css */
+.container {
+    display: flex;
+    height: 100vh; /* Ensure the container takes up the full viewport height */
+  }
+  
+  .content {
+    flex-grow: 1; /* Ensure the content takes up remaining space */
+    padding: 20px;
+    background-color: #f7f7f7;
+    overflow-y: auto; /* Allow scrolling if content overflows */
+  }
+
+  .spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 24px;
+    color: #333;
+  }
+  
