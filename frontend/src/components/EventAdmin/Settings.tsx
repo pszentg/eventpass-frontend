@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import useSWR from "swr";
-import wretch from "wretch";
 import { fetcher } from "@/app/auth/fetcher";
 import styles from "./settings.module.css";
 
