@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useSWR from "swr";
+import Cookies from "js-cookie";
 import { fetcher } from "@/app/auth/fetcher";
 import styles from "./settings.module.css";
 
@@ -13,27 +14,85 @@ interface Group {
   name: string;
 }
 
+interface EventData {
+  id: string;
+  groups: string[]; // group ids
+  admins: any[];
+  name: string;
+  start_date: string;
+  end_date: string;
+  location: string;
+  description: string;
+  client: string;
+}
+
 const EventAdminSettings = () => {
   const { data: events, error: eventsError } = useSWR<Event[]>(
     "/api/events",
     fetcher
   );
-  const [selectedEvent, setSelectedEvent] = useState<string>("");
-  const { data: groups, error: groupsError } = useSWR<Group[]>(
-    selectedEvent ? `/api/events/${selectedEvent}/groups` : null,
+  const [selectedEvent, setSelectedEvent] = useState<string>(
+    Cookies.get("selectedEvent") || ""
+  );
+  const { data: eventData, error: eventDataError } = useSWR<EventData>(
+    selectedEvent ? `/api/events/${selectedEvent}` : null,
     fetcher
   );
-  const [selectedGroup, setSelectedGroup] = useState<string>("");
+  const [selectedGroup, setSelectedGroup] = useState<string>(
+    Cookies.get("selectedGroup") || ""
+  );
+  const [groups, setGroups] = useState<Group[]>([]);
 
   const handleEventChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const eventId = e.target.value;
     setSelectedEvent(eventId);
     setSelectedGroup("");
+    setGroups([]); // Clear previous groups when a new event is selected
   };
 
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedGroup(e.target.value);
+    const groupId = e.target.value;
+    setSelectedGroup(groupId);
   };
+
+  const handleSave = async () => {
+    Cookies.set("selectedEvent", selectedEvent);
+    Cookies.set("selectedGroup", selectedGroup);
+
+    try {
+      const response = await fetch("/api/save-selections", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          eventId: selectedEvent,
+          groupId: selectedGroup,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to save selections");
+      }
+    } catch (error) {
+      console.error("Error saving selections:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchGroupDetails = async () => {
+      if (eventData && eventData.groups.length > 0) {
+        const groupDetails = await Promise.all(
+          eventData.groups.map(async (groupId) => {
+            const group = await fetcher(`/api/groups/${groupId}`);
+            return group;
+          })
+        );
+        setGroups(groupDetails);
+      }
+    };
+
+    fetchGroupDetails();
+  }, [eventData]);
 
   if (eventsError) return <div>Failed to load events</div>;
   if (!events) return <div>Loading events...</div>;
@@ -61,9 +120,11 @@ const EventAdminSettings = () => {
       {selectedEvent && (
         <div className={styles.field}>
           <label htmlFor="groupSelect">Select Group:</label>
-          {groupsError ? (
+          {eventDataError ? (
             <div>Failed to load groups</div>
-          ) : !groups ? (
+          ) : !eventData ? (
+            <div>Loading groups...</div>
+          ) : groups.length === 0 ? (
             <div>Loading groups...</div>
           ) : (
             <select
@@ -82,7 +143,9 @@ const EventAdminSettings = () => {
           )}
         </div>
       )}
-      {/* Add more admin settings form or content here */}
+      <button onClick={handleSave} className={styles.saveButton}>
+        Save
+      </button>
     </div>
   );
 };

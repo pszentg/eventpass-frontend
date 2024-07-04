@@ -8,7 +8,7 @@ import wretch from "wretch";
 import styles from "./groups.module.css";
 import Link from "next/link";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 type Group = {
   id: number;
