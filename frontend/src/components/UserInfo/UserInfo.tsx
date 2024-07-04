@@ -1,11 +1,10 @@
 import React from "react";
 import styles from "./UserInfo.module.css";
 import QRCode from "qrcode.react";
-import { usePathname } from "next/navigation";
 
 const UserInfo = ({ user }: { user: any }) => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL; // Ensure this is set in your environment variables
-  const qrCodeValue = `${BASE_URL}/add_user_to_group/${user.id}`;
+  const qrCodeValue = `${BASE_URL}/users/add_user_to_group/${user.id}`;
 
   return (
     <div className={styles.userInfo}>
