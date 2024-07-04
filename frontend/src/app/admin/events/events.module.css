@@ -80,17 +80,51 @@
 }
 
 .addButton {
+  margin-top: 10px;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
   border: none;
-  background-color: #28a745;
+  background-color: limegreen; /* Lime green color */
+  color: white;
+  border-radius: 15px; /* Rounded edges */
+}
+
+.addButton:hover {
+  background-color: #32cd32; /* Darker lime green on hover */
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.input, .textarea {
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.submitButton {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  background-color: #0070f3;
   color: white;
   border-radius: 3px;
 }
 
-.addButton:hover {
-  background-color: #218838;
+.submitButton:hover {
+  background-color: #005bb5;
 }
 
 .error {
