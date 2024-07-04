@@ -34,7 +34,7 @@ const GroupDetailPage = () => {
     mutate: mutateGroup,
   } = useSWR<Group>(groupId ? `/api/groups/${groupId}/` : null, fetcher);
   const { data: users, error: usersError } = useSWR<User[]>(
-    groupId ? `/api/get_users_of_group/${groupId}/` : null,
+    groupId ? `/api/groups/${groupId}/users` : null,
     fetcher
   );
 
