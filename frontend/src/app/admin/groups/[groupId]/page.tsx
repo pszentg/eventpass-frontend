@@ -33,10 +33,11 @@ const GroupDetailPage = () => {
     error: groupError,
     mutate: mutateGroup,
   } = useSWR<Group>(groupId ? `/api/groups/${groupId}/` : null, fetcher);
-  const { data: users, error: usersError } = useSWR<User[]>(
-    groupId ? `/api/groups/${groupId}/users` : null,
-    fetcher
-  );
+  const {
+    data: users,
+    error: usersError,
+    mutate: mutateUsers,
+  } = useSWR<User[]>(groupId ? `/api/groups/${groupId}/users` : null, fetcher);
 
   useEffect(() => {
     if (group) {
@@ -58,6 +59,15 @@ const GroupDetailPage = () => {
       .res();
     setIsEditing(false);
     mutateGroup();
+  };
+
+  const deleteUserFromGroup = async (userId: number) => {
+    const token = await getToken("access");
+    await wretch(`${BASE_URL}/api/users/${userId}/remove-group/${groupId}`)
+      .auth(`Bearer ${token}`)
+      .get()
+      .res();
+    mutateUsers();
   };
 
   return (
@@ -100,6 +110,12 @@ const GroupDetailPage = () => {
             <span className={styles.name}>
               {user.username} ({user.email})
             </span>
+            <button
+              className={styles.button}
+              onClick={() => deleteUserFromGroup(user.id)}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
