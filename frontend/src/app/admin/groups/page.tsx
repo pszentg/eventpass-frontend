@@ -82,6 +82,7 @@ const GroupsPage = () => {
           value={newGroupName}
           onChange={(e) => setNewGroupName(e.target.value)}
           placeholder="New group name"
+          required={true}
         />
         <button className={styles.addButton} onClick={createGroup}>
           Add Group
