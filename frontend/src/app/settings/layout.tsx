@@ -1,14 +1,17 @@
-// components/Admin/AdminLayout.tsx
 "use client";
+import { User } from "@/types";
 import { ReactNode, useContext, useEffect } from "react";
-import AdminSidenav from "@/components/Common/Sidenav/AdminSidenav";
-import styles from "./layout.module.css";
 import useSWR from "swr";
 import { fetcher } from "../auth/fetcher";
 import UserContext from "@/context/UserContext";
-import { User } from "@/types";
+import UserSidenav from "@/components/Common/Sidenav/UserSidenav";
+import styles from "./layout.module.css";
 
-const AdminLayout = ({ children }: { children: ReactNode }) => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const SettingsLayout = ({ children }: LayoutProps) => {
   const {
     data: fetchedUser,
     error,
@@ -18,7 +21,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
   const context = useContext(UserContext);
 
   if (!context) {
-    throw new Error("AdminLayout must be used within a UserProvider");
+    throw new Error("UserLayout must be used within a UserProvider");
   }
 
   const { user, setUser } = context;
@@ -30,19 +33,19 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
   }, [fetchedUser, setUser]);
 
   if (isValidating) {
-    return <div>Loading...</div>; // Replace with your spinner component
+    return <div className={styles.spinner}>Loading...</div>; // Replace with your spinner component
   }
 
   if (error) {
-    return <div>Error loading user data</div>; // Handle error appropriately
+    return <div className={styles.spinner}>Error loading user data</div>; // Handle error appropriately
   }
 
   return (
     <div className={styles.container}>
-      <AdminSidenav />
+      <UserSidenav />
       <div className={styles.content}>{children}</div>
     </div>
   );
 };
 
-export default AdminLayout;
+export default SettingsLayout;

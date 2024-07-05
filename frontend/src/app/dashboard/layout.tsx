@@ -5,13 +5,7 @@ import styles from "./layout.module.css";
 import useSWR from "swr";
 import { fetcher } from "../auth/fetcher";
 import UserContext from "@/context/UserContext";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
+import { User } from "@/types";
 
 interface LayoutProps {
   children: ReactNode;

@@ -6,7 +6,6 @@ import { AuthActions } from "@/app/auth/utils";
 
 const AdminSidenav = () => {
   const router = useRouter();
-  const user = useContext(UserContext);
   const { logout, removeTokens } = AuthActions();
 
   const handleLogout = () => {
@@ -28,13 +27,17 @@ const AdminSidenav = () => {
           <a href="/admin/dashboard">Admin Dashboard</a>
         </li>
         <li className={styles.navItem}>
-          <a href="/admin/groups">Manage Groups</a>
+          <a href="/admin/settings">Settings</a>
         </li>
-        <li className={styles.navItem}>
-          <a href="/profile">Profile</a>
+        <li>
+          <a href="/admin/groups" className={styles.navItem}>
+            Manage Groups
+          </a>
         </li>
-        <li className={styles.navItem}>
-          <a href="/settings">Settings</a>
+        <li>
+          <a href="/admin/events" className={styles.navItem}>
+            Manage Events
+          </a>
         </li>
       </ul>
       <button onClick={handleLogout} className={styles.logoutButton}>

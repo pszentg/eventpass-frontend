@@ -1,7 +1,7 @@
 import wretch from "wretch";
 import Cookies from "js-cookie";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 // Base API setup for making HTTP requests
 const api = wretch(`${BASE_URL}`).accept("application/json");
 
@@ -29,6 +29,8 @@ const getToken = (type: string) => {
 const removeTokens = () => {
   Cookies.remove("accessToken");
   Cookies.remove("refreshToken");
+  Cookies.remove("selectedEvent");
+  Cookies.remove("selectedGroup");
 };
 
 const register = (email: string, password: string) => {

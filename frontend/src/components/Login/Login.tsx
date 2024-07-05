@@ -15,7 +15,7 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null);
   const { login, storeToken, getToken } = AuthActions();
   const router = useRouter();
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
