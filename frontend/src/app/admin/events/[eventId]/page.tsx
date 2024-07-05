@@ -7,6 +7,8 @@ import styles from "../events.module.css";
 import { AuthActions } from "@/app/auth/utils";
 import { fetcher } from "@/app/auth/fetcher";
 import { useParams, useRouter } from "next/navigation";
+import AddGroupForm from "@/components/Group/AddGroupForm";
+import GroupList from "@/components/Group/GroupList";
 
 type Event = {
   id: number;
@@ -173,40 +175,12 @@ const EventDetailPage = () => {
         </button>
       </div>
       {isAddingGroup && (
-        <div className={styles.addContainer}>
-          <input
-            className={styles.addInput}
-            value={newGroupName}
-            onChange={(e) => setNewGroupName(e.target.value)}
-            placeholder="Enter group name"
-          />
-          <button
-            className={`${styles.button} ${styles.addGroupButton}`}
-            onClick={handleAddGroup}
-          >
-            Save
-          </button>
-          <button
-            className={`${styles.button} ${styles.addGroupButton}`}
-            onClick={() => setIsAddingGroup(false)}
-          >
-            Cancel
-          </button>
-        </div>
+        <AddGroupForm
+          onAddGroup={handleAddGroup}
+          onCancel={() => setIsAddingGroup(false)}
+        />
       )}
-      <ul className={styles.list}>
-        {eventGroups.map((group) => (
-          <li key={group.id} className={styles.item}>
-            <span className={styles.name}>{group.name}</span>
-            <button
-              className={styles.button}
-              onClick={() => handleGroupEdit(group.id)}
-            >
-              Edit
-            </button>
-          </li>
-        ))}
-      </ul>
+      <GroupList groups={eventGroups} onEditGroup={handleGroupEdit} />
     </div>
   );
 };

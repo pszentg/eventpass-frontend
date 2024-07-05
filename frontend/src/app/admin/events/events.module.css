@@ -66,18 +66,6 @@
   background-color: #005bb5;
 }
 
-.addContainer {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.addInput {
-  padding: 10px;
-  font-size: 16px;
-  margin-right: 10px;
-  flex-grow: 1;
-}
 
 .addButton {
   margin-top: 10px;
