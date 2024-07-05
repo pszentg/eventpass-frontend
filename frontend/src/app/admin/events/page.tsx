@@ -8,6 +8,7 @@ import wretch from "wretch";
 import styles from "./events.module.css";
 import Link from "next/link";
 import UserContext from "@/context/UserContext";
+import EventForm, { NewEvent } from "@/components/Event/EventForm"; // Updated import path
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -29,31 +30,17 @@ const EventsPage = () => {
     mutate,
   } = useSWR<Event[]>("/api/events/", fetcher);
   const [showForm, setShowForm] = useState(false);
-  const [newEvent, setNewEvent] = useState({
-    name: "",
-    start_date: "",
-    end_date: "",
-    location: "",
-    description: "",
-  });
 
   if (error) return <div>Failed to load events</div>;
   if (!events) return <div>Loading...</div>;
 
-  const createEvent = async () => {
+  const createEvent = async (newEvent: NewEvent) => {
     if (!userContext?.user) return; // Ensure user is defined
     const token = await getToken("access");
     await wretch(`${BASE_URL}/api/events/`)
       .auth(`Bearer ${token}`)
       .post({ ...newEvent, client: userContext.user.id }) // Include client_id
       .res();
-    setNewEvent({
-      name: "",
-      start_date: "",
-      end_date: "",
-      location: "",
-      description: "",
-    });
     setShowForm(false);
     mutate(); // Revalidate the data
   };
@@ -76,13 +63,6 @@ const EventsPage = () => {
     mutate(); // Revalidate the data
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setNewEvent({ ...newEvent, [name]: value });
-  };
-
   return (
     <div className={styles.container}>
       <h1>Events</h1>
@@ -93,48 +73,10 @@ const EventsPage = () => {
         Add Event
       </button>
       {showForm && (
-        <div className={styles.formContainer}>
-          <input
-            className={styles.input}
-            name="name"
-            value={newEvent.name}
-            onChange={handleInputChange}
-            placeholder="Event Name"
-          />
-          <input
-            className={styles.input}
-            type="date"
-            name="start_date"
-            value={newEvent.start_date}
-            onChange={handleInputChange}
-            placeholder="Start Date"
-          />
-          <input
-            className={styles.input}
-            type="date"
-            name="end_date"
-            value={newEvent.end_date}
-            onChange={handleInputChange}
-            placeholder="End Date"
-          />
-          <input
-            className={styles.input}
-            name="location"
-            value={newEvent.location}
-            onChange={handleInputChange}
-            placeholder="Location"
-          />
-          <textarea
-            className={styles.textarea}
-            name="description"
-            value={newEvent.description}
-            onChange={handleInputChange}
-            placeholder="Description"
-          />
-          <button className={styles.submitButton} onClick={createEvent}>
-            Submit
-          </button>
-        </div>
+        <EventForm
+          createEvent={createEvent}
+          onCancel={() => setShowForm(false)}
+        />
       )}
       <ul className={styles.list}>
         {events.map((event) => (
