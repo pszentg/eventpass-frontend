@@ -9,6 +9,8 @@ import { fetcher } from "@/app/auth/fetcher";
 import { useParams, useRouter } from "next/navigation";
 import AddGroupForm from "@/components/Group/AddGroupForm";
 import GroupList from "@/components/Group/GroupList";
+import { Container, Typography } from "@mui/material";
+import FormBuilder from "@/components/Event/FormBuilder";
 
 type Event = {
   id: number;
@@ -165,6 +167,8 @@ const EventDetailPage = () => {
           </>
         )}
       </div>
+      <h2 className={styles.h2}> Create registration form</h2>
+      <FormBuilder />
       <div className={styles.headerContainer}>
         <h2 className={styles.subheader}>Groups in this event</h2>
         <button
