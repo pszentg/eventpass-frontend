@@ -1,11 +1,12 @@
 // components/Event/FormBuilder.tsx
 
 import React, { useState } from "react";
+import wretch from "wretch";
+
 import {
   TextField,
   Button,
   Box,
-  Typography,
   Container,
   IconButton,
   MenuItem,
@@ -15,20 +16,27 @@ import {
   Divider,
 } from "@mui/material";
 import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
+import { AuthActions } from "@/app/auth/utils";
 
 interface FormField {
   id: number;
   label: string;
-  type: "text" | "radio" | "multiple_choice" | "dropdown" | "file";
+  field_type: "text" | "radio" | "multiple_choice" | "dropdown";
   options?: string[];
 }
 
-const FormBuilder: React.FC = () => {
+interface FormBuilderProps {
+  eventId: string;
+}
+
+const FormBuilder: React.FC<FormBuilderProps> = ({ eventId }) => {
   const [fields, setFields] = useState<FormField[]>([]);
   const [fieldId, setFieldId] = useState(1);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const { getToken } = AuthActions();
 
   const addField = () => {
-    setFields([...fields, { id: fieldId, label: "", type: "text" }]);
+    setFields([...fields, { id: fieldId, label: "", field_type: "text" }]);
     setFieldId(fieldId + 1);
   };
 
@@ -44,15 +52,15 @@ const FormBuilder: React.FC = () => {
 
   const handleTypeChange = (
     id: number,
-    type: "text" | "radio" | "multiple_choice" | "dropdown" | "file"
+    field_type: "text" | "radio" | "multiple_choice" | "dropdown"
   ) => {
     setFields(
       fields.map((field) =>
         field.id === id
           ? {
               ...field,
-              type,
-              options: type !== "text" && type !== "file" ? [] : undefined,
+              field_type,
+              options: field_type !== "text" ? [] : undefined,
             }
           : field
       )
@@ -104,9 +112,18 @@ const FormBuilder: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    // Handle form submission
-    // This is where you'd send the form data to your backend
-    console.log("Submitted fields:", fields);
+    try {
+      const response = wretch(
+        `${BASE_URL}/api/events/${eventId}/create_registration_form/`
+      )
+        .auth(`Bearer ${getToken("access")}`)
+        .post({ fields })
+        .json();
+
+      console.log("Form submitted successfully:", response);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -128,7 +145,7 @@ const FormBuilder: React.FC = () => {
               >
                 <InputLabel>Type</InputLabel>
                 <Select
-                  value={field.type}
+                  value={field.field_type}
                   onChange={(e) =>
                     handleTypeChange(
                       field.id,
@@ -137,7 +154,6 @@ const FormBuilder: React.FC = () => {
                         | "radio"
                         | "multiple_choice"
                         | "dropdown"
-                        | "file"
                     )
                   }
                   label="Type"
@@ -146,14 +162,13 @@ const FormBuilder: React.FC = () => {
                   <MenuItem value="radio">Radio Button</MenuItem>
                   <MenuItem value="multiple_choice">Multiple Choice</MenuItem>
                   <MenuItem value="dropdown">Dropdown</MenuItem>
-                  <MenuItem value="file">File Input</MenuItem>
                 </Select>
               </FormControl>
               <IconButton onClick={() => removeField(field.id)}>
                 <RemoveCircleOutline />
               </IconButton>
             </Box>
-            {field.type !== "text" && field.type !== "file" && (
+            {field.field_type !== "text" && (
               <Box mt={2}>
                 {field.options!.map((option, optionIndex) => (
                   <Box
