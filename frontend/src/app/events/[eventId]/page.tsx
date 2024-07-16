@@ -25,7 +25,11 @@ const EventPage = () => {
     <div className="bg-custom min-h-screen p-6">
       <div className="container mx-auto p-4 bg-white rounded shadow-lg">
         <h1 className="text-2xl font-bold mb-4">Event Registration Form</h1>
-        <RegistrationForm fields={data.fields} />
+        <RegistrationForm
+          fields={data.fields}
+          eventId={Number(eventId)}
+          registrationFormId={Number(data.id)}
+        />
       </div>
     </div>
   );

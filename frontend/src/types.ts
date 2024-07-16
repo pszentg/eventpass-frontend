@@ -13,6 +13,7 @@ export interface Field {
 }
 
 export interface RegistrationForm {
+  id: number;
   event: number;
   created_at: string;
   updated_at: string;
