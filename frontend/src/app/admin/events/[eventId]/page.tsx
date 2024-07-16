@@ -3,13 +3,23 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import wretch from "wretch";
-import styles from "../events.module.css";
 import { AuthActions } from "@/app/auth/utils";
 import { fetcher } from "@/app/auth/fetcher";
 import { useParams, useRouter } from "next/navigation";
 import AddGroupForm from "@/components/Group/AddGroupForm";
 import GroupList from "@/components/Group/GroupList";
 import FormBuilder from "@/components/Event/FormBuilder/FormBuilder";
+import { RegistrationFormType } from "@/types";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  CircularProgress,
+  IconButton,
+} from "@mui/material";
+import { Edit, Save, Cancel } from "@mui/icons-material";
 
 type Event = {
   id: number;
@@ -42,6 +52,12 @@ const EventDetailPage = () => {
     mutate: mutateEvent,
   } = useSWR<Event>(eventId ? `/api/events/${eventId}/` : null, fetcher);
 
+  const { data: registrationForm, error: registrationFormError } =
+    useSWR<RegistrationFormType>(
+      eventId ? `/api/events/${eventId}/get_registration_form/` : null,
+      fetcher
+    );
+
   useEffect(() => {
     if (event) {
       setEventName(event.name);
@@ -70,8 +86,17 @@ const EventDetailPage = () => {
   };
 
   if (eventError)
-    return <div className={styles.error}>Failed to load event</div>;
-  if (!event) return <div className={styles.loading}>Loading...</div>;
+    return (
+      <Container>
+        <Typography color="error">Failed to load event</Typography>
+      </Container>
+    );
+  if (!event)
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
 
   const updateEventName = async () => {
     const token = await getToken("access");
@@ -134,57 +159,75 @@ const EventDetailPage = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.header}>Edit Event</h1>
-      <div>
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Edit Event
+      </Typography>
+      <Box display="flex" alignItems="center" mb={2}>
         {isEditing ? (
           <>
-            <input
-              className={styles.input}
+            <TextField
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
+              variant="outlined"
+              style={{ marginRight: 8 }}
             />
-            <button className={styles.button} onClick={updateEventName}>
-              Save
-            </button>
-            <button
-              className={styles.button}
-              onClick={() => setIsEditing(false)}
-            >
-              Cancel
-            </button>
+            <IconButton onClick={updateEventName} color="primary">
+              <Save />
+            </IconButton>
+            <IconButton onClick={() => setIsEditing(false)} color="secondary">
+              <Cancel />
+            </IconButton>
           </>
         ) : (
           <>
-            <span className={styles.name}>{event.name}</span>
-            <button
-              className={styles.button}
-              onClick={() => setIsEditing(true)}
-            >
-              Edit
-            </button>
+            <Typography variant="h6" style={{ marginRight: 8 }}>
+              {event.name}
+            </Typography>
+            <IconButton onClick={() => setIsEditing(true)} color="primary">
+              <Edit />
+            </IconButton>
           </>
         )}
-      </div>
-      <h2 className={styles.h2}> Create registration form</h2>
-      <FormBuilder eventId={eventId as string} />
-      <div className={styles.headerContainer}>
-        <h2 className={styles.subheader}>Groups in this event</h2>
-        <button
-          className={styles.addButton}
-          onClick={() => setIsAddingGroup(true)}
-        >
-          Add Group
-        </button>
-      </div>
-      {isAddingGroup && (
-        <AddGroupForm
-          onAddGroup={handleAddGroup}
-          onCancel={() => setIsAddingGroup(false)}
+      </Box>
+      <Typography variant="h5" gutterBottom>
+        Create registration form
+      </Typography>
+      {registrationForm && (
+        <Typography variant="subtitle1" gutterBottom>
+          Form Version: {registrationForm.version_number}
+        </Typography>
+      )}
+      {registrationFormError ? (
+        <Typography color="error">Failed to load registration form</Typography>
+      ) : !registrationForm ? (
+        <CircularProgress />
+      ) : (
+        <FormBuilder
+          eventId={eventId as string}
+          initialForm={registrationForm}
         />
       )}
-      <GroupList groups={eventGroups} onEditGroup={handleGroupEdit} />
-    </div>
+      <Box mt={4}>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="h5">Groups in this event</Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setIsAddingGroup(true)}
+          >
+            Add Group
+          </Button>
+        </Box>
+        {isAddingGroup && (
+          <AddGroupForm
+            onAddGroup={handleAddGroup}
+            onCancel={() => setIsAddingGroup(false)}
+          />
+        )}
+        <GroupList groups={eventGroups} onEditGroup={handleGroupEdit} />
+      </Box>
+    </Container>
   );
 };
 

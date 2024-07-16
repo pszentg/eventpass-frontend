@@ -10,12 +10,12 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { Field } from "@/types";
+import { RegistrationFieldType } from "@/types";
 import wretch from "wretch";
 import { AuthActions } from "@/app/auth/utils";
 
 interface RegistrationFormProps {
-  fields: Field[];
+  fields: RegistrationFieldType[];
   eventId: number;
   registrationFormId: number;
 }

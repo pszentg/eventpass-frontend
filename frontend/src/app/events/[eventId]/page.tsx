@@ -5,16 +5,15 @@ import React from "react";
 import useSWR from "swr";
 import { fetchRegistrationForm } from "@/api/api";
 import RegistrationForm from "@/components/Event/Registration/RegistrationForm";
-import { RegistrationForm as RegistrationFormType } from "@/types";
+import { RegistrationFormType } from "@/types";
 import { useParams } from "next/navigation";
-import styles from "../events.module.css";
 
 const EventPage = () => {
   const params = useParams();
   const { eventId } = params;
 
   const { data, error } = useSWR<RegistrationFormType>(
-    eventId ? `api/events/${eventId}/get_event_registration_form/` : null,
+    eventId ? `api/events/${eventId}/get_registration_form/` : null,
     () => fetchRegistrationForm(Number(eventId))
   );
 

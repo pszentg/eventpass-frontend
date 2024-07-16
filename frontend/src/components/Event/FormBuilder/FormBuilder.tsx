@@ -1,6 +1,7 @@
 // components/Event/FormBuilder.tsx
+"use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import wretch from "wretch";
 
 import {
@@ -14,129 +15,128 @@ import {
   FormControl,
   InputLabel,
   Divider,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 import { AuthActions } from "@/app/auth/utils";
-
-interface FormField {
-  id: number;
-  label: string;
-  field_type: "text" | "radio" | "multiple_choice" | "dropdown";
-  options?: string[];
-}
+import { RegistrationFormType, RegistrationFieldType } from "@/types";
 
 interface FormBuilderProps {
   eventId: string;
+  initialForm?: RegistrationFormType;
 }
 
-const FormBuilder: React.FC<FormBuilderProps> = ({ eventId }) => {
-  const [fields, setFields] = useState<FormField[]>([]);
-  const [fieldId, setFieldId] = useState(1);
+const FormBuilder: React.FC<FormBuilderProps> = ({ eventId, initialForm }) => {
+  const [formVersion, setFormVersion] = useState<number | undefined>(
+    initialForm?.version_number
+  );
+  const [fields, setFields] = useState<RegistrationFieldType[]>(
+    initialForm?.fields || []
+  );
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { getToken } = AuthActions();
 
+  useEffect(() => {
+    if (initialForm) {
+      setFormVersion(initialForm.version_number);
+      setFields(initialForm.fields);
+    }
+  }, [initialForm]);
+
   const addField = () => {
-    setFields([...fields, { id: fieldId, label: "", field_type: "text" }]);
-    setFieldId(fieldId + 1);
+    setFields([...fields, { label: "", field_type: "text", required: false }]);
   };
 
-  const removeField = (id: number) => {
-    setFields(fields.filter((field) => field.id !== id));
+  const removeField = (index: number) => {
+    setFields(fields.filter((_, i) => i !== index));
   };
 
-  const handleLabelChange = (id: number, label: string) => {
-    setFields(
-      fields.map((field) => (field.id === id ? { ...field, label } : field))
-    );
+  const handleLabelChange = (index: number, label: string) => {
+    const newFields = [...fields];
+    newFields[index] = { ...newFields[index], label };
+    setFields(newFields);
   };
 
   const handleTypeChange = (
-    id: number,
+    index: number,
     field_type: "text" | "radio" | "multiple_choice" | "dropdown"
   ) => {
-    setFields(
-      fields.map((field) =>
-        field.id === id
-          ? {
-              ...field,
-              field_type,
-              options: field_type !== "text" ? [] : undefined,
-            }
-          : field
-      )
-    );
+    const newFields = [...fields];
+    newFields[index] = {
+      ...newFields[index],
+      field_type,
+      options: field_type !== "text" ? [] : undefined,
+    };
+    setFields(newFields);
   };
 
   const handleOptionChange = (
-    fieldId: number,
+    fieldIndex: number,
     optionIndex: number,
     optionValue: string
   ) => {
-    setFields(
-      fields.map((field) =>
-        field.id === fieldId
-          ? {
-              ...field,
-              options: field.options!.map((option, index) =>
-                index === optionIndex ? optionValue : option
-              ),
-            }
-          : field
-      )
-    );
+    const newFields = [...fields];
+    newFields[fieldIndex].options![optionIndex] = optionValue;
+    setFields(newFields);
   };
 
-  const addOption = (fieldId: number) => {
-    setFields(
-      fields.map((field) =>
-        field.id === fieldId
-          ? { ...field, options: [...(field.options || []), ""] }
-          : field
-      )
-    );
+  const addOption = (fieldIndex: number) => {
+    const newFields = [...fields];
+    if (!newFields[fieldIndex].options) {
+      newFields[fieldIndex].options = [];
+    }
+    newFields[fieldIndex].options!.push("");
+    setFields(newFields);
   };
 
-  const removeOption = (fieldId: number, optionIndex: number) => {
-    setFields(
-      fields.map((field) =>
-        field.id === fieldId
-          ? {
-              ...field,
-              options: field.options!.filter(
-                (_, index) => index !== optionIndex
-              ),
-            }
-          : field
-      )
+  const removeOption = (fieldIndex: number, optionIndex: number) => {
+    const newFields = [...fields];
+    newFields[fieldIndex].options = newFields[fieldIndex].options!.filter(
+      (_, i) => i !== optionIndex
     );
+    setFields(newFields);
   };
 
   const handleSubmit = async () => {
     try {
-      const response = wretch(
+      await wretch(
         `${BASE_URL}/api/events/${eventId}/create_registration_form/`
       )
-        .auth(`Bearer ${getToken("access")}`)
+        .auth(`Bearer ${await getToken("access")}`)
         .post({ fields })
         .json();
 
-      console.log("Form submitted successfully:", response);
+      setSnackbarMessage("Form submitted successfully");
+      setSnackbarSeverity("success");
     } catch (error) {
-      console.error("Error submitting form:", error);
+      setSnackbarMessage("Error submitting form");
+      setSnackbarSeverity("error");
+    } finally {
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
     <Container style={{ marginTop: 16, padding: "8px 16px" }}>
       <Box>
         {fields.map((field, index) => (
-          <Box key={field.id} display="flex" flexDirection="column" mb={2}>
+          <Box key={index} display="flex" flexDirection="column" mb={2}>
             <Box display="flex" alignItems="center">
               <TextField
                 label="Label"
                 variant="outlined"
                 value={field.label}
-                onChange={(e) => handleLabelChange(field.id, e.target.value)}
+                onChange={(e) => handleLabelChange(index, e.target.value)}
                 style={{ marginRight: 8 }}
               />
               <FormControl
@@ -148,7 +148,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventId }) => {
                   value={field.field_type}
                   onChange={(e) =>
                     handleTypeChange(
-                      field.id,
+                      index,
                       e.target.value as
                         | "text"
                         | "radio"
@@ -164,7 +164,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventId }) => {
                   <MenuItem value="dropdown">Dropdown</MenuItem>
                 </Select>
               </FormControl>
-              <IconButton onClick={() => removeField(field.id)}>
+              <IconButton onClick={() => removeField(index)}>
                 <RemoveCircleOutline />
               </IconButton>
             </Box>
@@ -175,23 +175,19 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventId }) => {
                     key={optionIndex}
                     display="flex"
                     alignItems="center"
-                    mb={1}
+                    mb={2}
                   >
                     <TextField
                       label={`Option ${optionIndex + 1}`}
                       variant="outlined"
                       value={option}
                       onChange={(e) =>
-                        handleOptionChange(
-                          field.id,
-                          optionIndex,
-                          e.target.value
-                        )
+                        handleOptionChange(index, optionIndex, e.target.value)
                       }
                       style={{ marginRight: 8 }}
                     />
                     <IconButton
-                      onClick={() => removeOption(field.id, optionIndex)}
+                      onClick={() => removeOption(index, optionIndex)}
                     >
                       <RemoveCircleOutline />
                     </IconButton>
@@ -200,7 +196,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventId }) => {
                 <Button
                   variant="contained"
                   startIcon={<AddCircleOutline />}
-                  onClick={() => addOption(field.id)}
+                  onClick={() => addOption(index)}
                 >
                   Add Option
                 </Button>
@@ -228,6 +224,19 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ eventId }) => {
       >
         Save Form
       </Button>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

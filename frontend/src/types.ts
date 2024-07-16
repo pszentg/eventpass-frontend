@@ -5,18 +5,18 @@ export interface User {
   role: string;
 }
 
-export interface Field {
+export interface RegistrationFieldType {
   label: string;
-  field_type: string;
+  field_type: "text" | "radio" | "multiple_choice" | "dropdown";
   options?: string[];
   required: boolean;
 }
 
-export interface RegistrationForm {
+export interface RegistrationFormType {
   id: number;
   event: number;
   created_at: string;
   updated_at: string;
   version_number: number;
-  fields: Field[];
+  fields: RegistrationFieldType[];
 }
