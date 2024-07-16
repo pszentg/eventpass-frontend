@@ -8,7 +8,7 @@ import wretch from "wretch";
 import styles from "./events.module.css";
 import Link from "next/link";
 import UserContext from "@/context/UserContext";
-import EventForm, { NewEvent } from "@/components/Event/EventForm"; // Updated import path
+import EventForm, { NewEvent } from "@/components/Event/FormBuilder/EventForm"; // Updated import path
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 

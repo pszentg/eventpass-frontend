@@ -9,7 +9,7 @@ import { fetcher } from "@/app/auth/fetcher";
 import { useParams, useRouter } from "next/navigation";
 import AddGroupForm from "@/components/Group/AddGroupForm";
 import GroupList from "@/components/Group/GroupList";
-import FormBuilder from "@/components/Event/FormBuilder";
+import FormBuilder from "@/components/Event/FormBuilder/FormBuilder";
 
 type Event = {
   id: number;
