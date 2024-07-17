@@ -55,7 +55,14 @@ const EventDetailPage = () => {
   const { data: registrationForm, error: registrationFormError } =
     useSWR<RegistrationFormType>(
       eventId ? `/api/events/${eventId}/get_registration_form/` : null,
-      fetcher
+      fetcher,
+      {
+        onError: (error) => {
+          if (error.status !== 404) {
+            console.error("Failed to load registration form:", error);
+          }
+        },
+      }
     );
 
   useEffect(() => {
@@ -158,6 +165,15 @@ const EventDetailPage = () => {
     }
   };
 
+  const emptyRegistrationForm: RegistrationFormType = {
+    id: 0,
+    event: Number(eventId),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    version_number: 1,
+    fields: [],
+  };
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
@@ -198,14 +214,12 @@ const EventDetailPage = () => {
           Form Version: {registrationForm.version_number}
         </Typography>
       )}
-      {registrationFormError ? (
+      {registrationFormError && registrationFormError.status !== 404 ? (
         <Typography color="error">Failed to load registration form</Typography>
-      ) : !registrationForm ? (
-        <CircularProgress />
       ) : (
         <FormBuilder
           eventId={eventId as string}
-          initialForm={registrationForm}
+          initialForm={registrationForm || emptyRegistrationForm}
         />
       )}
       <Box mt={4}>
