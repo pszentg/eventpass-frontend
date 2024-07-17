@@ -1,4 +1,4 @@
-import styles from "./Group.module.css";
+import { List, ListItem, ListItemText, Button, Box } from "@mui/material";
 
 interface Group {
   id: number;
@@ -12,19 +12,24 @@ interface GroupListProps {
 
 const GroupList: React.FC<GroupListProps> = ({ groups, onEditGroup }) => {
   return (
-    <ul className={styles.list}>
+    <List>
       {groups.map((group) => (
-        <li key={group.id} className={styles.item}>
-          <span className={styles.name}>{group.name}</span>
-          <button
-            className={styles.button}
-            onClick={() => onEditGroup(group.id)}
-          >
-            Edit
-          </button>
-        </li>
+        <ListItem
+          key={group.id}
+          secondaryAction={
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => onEditGroup(group.id)}
+            >
+              Edit
+            </Button>
+          }
+        >
+          <ListItemText primary={group.name} />
+        </ListItem>
       ))}
-    </ul>
+    </List>
   );
 };
 

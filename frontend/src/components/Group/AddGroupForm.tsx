@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./Group.module.css";
+import { TextField, Button, Box, Container } from "@mui/material";
 
 interface AddGroupFormProps {
   onAddGroup: (groupName: string) => void;
@@ -18,26 +18,25 @@ const AddGroupForm: React.FC<AddGroupFormProps> = ({
   };
 
   return (
-    <div className={styles.addContainer}>
-      <input
-        className={styles.addInput}
-        value={groupName}
-        onChange={(e) => setGroupName(e.target.value)}
-        placeholder="Enter group name"
-      />
-      <button
-        className={`${styles.button} ${styles.addButton}`}
-        onClick={handleAddGroup}
-      >
-        Save
-      </button>
-      <button
-        className={`${styles.button} ${styles.addButton}`}
-        onClick={onCancel}
-      >
-        Cancel
-      </button>
-    </div>
+    <Container>
+      <Box display="flex" flexDirection="column" gap={2} mt={2}>
+        <TextField
+          variant="outlined"
+          label="Enter group name"
+          value={groupName}
+          onChange={(e) => setGroupName(e.target.value)}
+          fullWidth
+        />
+        <Box display="flex" justifyContent="space-between">
+          <Button variant="contained" color="primary" onClick={handleAddGroup}>
+            Save
+          </Button>
+          <Button variant="outlined" color="secondary" onClick={onCancel}>
+            Cancel
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

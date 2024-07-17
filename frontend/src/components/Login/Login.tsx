@@ -2,8 +2,16 @@
 import wretch from "wretch";
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./Login.module.css";
 import { AuthActions } from "@/app/auth/utils";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  Link,
+} from "@mui/material";
 
 interface UserResponse {
   role: string;
@@ -28,12 +36,14 @@ const Login = () => {
       });
     } catch (err: any) {
       setError(err.message);
+      return;
     }
 
     const userResponse = await wretch(`${BASE_URL}/auth/users/me`)
       .auth(`Bearer ${getToken("access")}`)
       .get()
       .json<UserResponse>();
+
     if (userResponse.role === "client") {
       router.push("/admin/dashboard");
     } else {
@@ -46,56 +56,73 @@ const Login = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.loginBox}>
-        <h1 className={styles.title}>Login</h1>
+    <Container maxWidth="sm">
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        height="100vh"
+      >
+        <Typography variant="h4" gutterBottom>
+          Login
+        </Typography>
         <form onSubmit={handleSubmit}>
-          {error && <div className={styles.error}>{error}</div>}
-          <div className={styles.inputGroup}>
-            <label>Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="default@example.com"
-              required
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label>Password:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className={styles.button}>
+          {error && (
+            <Alert severity="error" style={{ marginBottom: 16 }}>
+              {error}
+            </Alert>
+          )}
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="default@example.com"
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            style={{ marginTop: 16 }}
+          >
             Login
-          </button>
+          </Button>
         </form>
-        <div className={styles.footer}>
-          <p>
-            <button
-              onClick={handleRegisterClick}
-              className={styles.registerButton}
-            >
-              Create new account
-            </button>
-          </p>
-          <p>
-            <a href="/reset-password" className={styles.link}>
-              Reset Password
-            </a>
-          </p>
-          <p>
-            <a href="/privacy-policy" className={styles.link}>
-              Privacy Policy
-            </a>
-          </p>
-        </div>
-      </div>
-    </div>
+        <Box mt={2}>
+          <Button
+            onClick={handleRegisterClick}
+            color="secondary"
+            fullWidth
+            variant="outlined"
+          >
+            Create new account
+          </Button>
+        </Box>
+        <Box mt={2} textAlign="center">
+          <Link href="/reset-password" underline="hover">
+            Reset Password
+          </Link>
+          <br />
+          <Link href="/privacy-policy" underline="hover">
+            Privacy Policy
+          </Link>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
