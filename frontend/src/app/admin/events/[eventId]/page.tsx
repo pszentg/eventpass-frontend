@@ -119,7 +119,7 @@ const EventDetailPage = () => {
     router.push(`/admin/groups/${groupId}`);
   };
 
-  const handleAddGroup = async () => {
+  const handleAddGroup = async (groupName: string) => {
     const token = await getToken("access");
 
     let groupId = null;

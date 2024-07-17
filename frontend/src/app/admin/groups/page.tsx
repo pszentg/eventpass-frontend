@@ -5,8 +5,24 @@ import { AuthActions } from "@/app/auth/utils";
 import { useState } from "react";
 import useSWR from "swr";
 import wretch from "wretch";
-import styles from "./groups.module.css";
 import Link from "next/link";
+import {
+  Container,
+  Typography,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  TextField,
+  IconButton,
+  Box,
+} from "@mui/material";
+import {
+  Add,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -25,8 +41,18 @@ const GroupsPage = () => {
   const [newGroupName, setNewGroupName] = useState("");
   const [editingGroup, setEditingGroup] = useState<Group | null>(null);
 
-  if (error) return <div>Failed to load groups</div>;
-  if (!groups) return <div>Loading...</div>;
+  if (error)
+    return (
+      <Container>
+        <Typography color="error">Failed to load groups</Typography>
+      </Container>
+    );
+  if (!groups)
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
 
   const createGroup = async () => {
     const token = await getToken("access");
@@ -58,37 +84,53 @@ const GroupsPage = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1>Groups</h1>
-      <ul className={styles.list}>
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Groups
+      </Typography>
+      <List>
         {groups.map((group) => (
-          <li key={group.id} className={styles.item}>
-            <span className={styles.name}>{group.name}</span>
-            <Link href={`/admin/groups/${group.id}`}>
-              <div className={styles.button}>Edit</div>
-            </Link>
-            <button
-              className={styles.button}
-              onClick={() => deleteGroup(group.id)}
-            >
-              Delete
-            </button>
-          </li>
+          <ListItem
+            key={group.id}
+            secondaryAction={
+              <>
+                <Link href={`/admin/groups/${group.id}`} passHref>
+                  <IconButton color="primary">
+                    <EditIcon />
+                  </IconButton>
+                </Link>
+                <IconButton
+                  color="secondary"
+                  onClick={() => deleteGroup(group.id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </>
+            }
+          >
+            <ListItemText primary={group.name} />
+          </ListItem>
         ))}
-      </ul>
-      <div className={styles.addContainer}>
-        <input
-          className={styles.addInput}
+      </List>
+      <Box display="flex" alignItems="center" mt={2}>
+        <TextField
+          variant="outlined"
+          label="New group name"
           value={newGroupName}
           onChange={(e) => setNewGroupName(e.target.value)}
-          placeholder="New group name"
-          required={true}
+          required
         />
-        <button className={styles.addButton} onClick={createGroup}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Add />}
+          onClick={createGroup}
+          style={{ marginLeft: 8 }}
+        >
           Add Group
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Box>
+    </Container>
   );
 };
 

@@ -3,10 +3,22 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import wretch from "wretch";
-import styles from "../groups.module.css";
 import { AuthActions } from "@/app/auth/utils";
 import { fetcher } from "@/app/auth/fetcher";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
+import { Edit, Save, Cancel, Delete as DeleteIcon } from "@mui/icons-material";
 
 type Group = {
   id: number;
@@ -46,10 +58,23 @@ const GroupDetailPage = () => {
   }, [group]);
 
   if (groupError)
-    return <div className={styles.error}>Failed to load group</div>;
+    return (
+      <Container>
+        <Typography color="error">Failed to load group</Typography>
+      </Container>
+    );
   if (usersError)
-    return <div className={styles.error}>Failed to load users</div>;
-  if (!group || !users) return <div className={styles.loading}>Loading...</div>;
+    return (
+      <Container>
+        <Typography color="error">Failed to load users</Typography>
+      </Container>
+    );
+  if (!group || !users)
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
 
   const updateGroupName = async () => {
     const token = await getToken("access");
@@ -71,55 +96,58 @@ const GroupDetailPage = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.header}>Edit Group</h1>
-      <div>
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Edit Group
+      </Typography>
+      <Box display="flex" alignItems="center" mb={2}>
         {isEditing ? (
           <>
-            <input
-              className={styles.input}
+            <TextField
+              variant="outlined"
               value={groupName}
               onChange={(e) => setGroupName(e.target.value)}
+              style={{ marginRight: 8 }}
             />
-            <button className={styles.button} onClick={updateGroupName}>
-              Save
-            </button>
-            <button
-              className={styles.button}
-              onClick={() => setIsEditing(false)}
-            >
-              Cancel
-            </button>
+            <IconButton onClick={updateGroupName} color="primary">
+              <Save />
+            </IconButton>
+            <IconButton onClick={() => setIsEditing(false)} color="secondary">
+              <Cancel />
+            </IconButton>
           </>
         ) : (
           <>
-            <span className={styles.name}>{group.name}</span>
-            <button
-              className={styles.button}
-              onClick={() => setIsEditing(true)}
-            >
-              Edit
-            </button>
+            <Typography variant="h6" style={{ marginRight: 8 }}>
+              {group.name}
+            </Typography>
+            <IconButton onClick={() => setIsEditing(true)} color="primary">
+              <Edit />
+            </IconButton>
           </>
         )}
-      </div>
-      <h2 className={styles.subheader}>Users in this group</h2>
-      <ul className={styles.list}>
+      </Box>
+      <Typography variant="h5" gutterBottom>
+        Users in this group
+      </Typography>
+      <List>
         {users.map((user) => (
-          <li key={user.id} className={styles.item}>
-            <span className={styles.name}>
-              {user.username} ({user.email})
-            </span>
-            <button
-              className={styles.button}
-              onClick={() => deleteUserFromGroup(user.id)}
-            >
-              Delete
-            </button>
-          </li>
+          <ListItem
+            key={user.id}
+            secondaryAction={
+              <IconButton
+                color="secondary"
+                onClick={() => deleteUserFromGroup(user.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            }
+          >
+            <ListItemText primary={`${user.username} (${user.email})`} />
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Container>
   );
 };
 

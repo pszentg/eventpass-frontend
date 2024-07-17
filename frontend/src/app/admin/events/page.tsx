@@ -5,10 +5,24 @@ import { AuthActions } from "@/app/auth/utils";
 import { useState, useContext } from "react";
 import useSWR from "swr";
 import wretch from "wretch";
-import styles from "./events.module.css";
 import Link from "next/link";
 import UserContext from "@/context/UserContext";
-import EventForm, { NewEvent } from "@/components/Event/FormBuilder/EventForm"; // Updated import path
+import EventForm, { NewEvent } from "@/components/Event/FormBuilder/EventForm";
+import {
+  Container,
+  Typography,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  IconButton,
+} from "@mui/material";
+import {
+  Add,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -23,7 +37,7 @@ type Event = {
 
 const EventsPage = () => {
   const { getToken } = AuthActions();
-  const userContext = useContext(UserContext); // Accessing the user context
+  const userContext = useContext(UserContext);
   const {
     data: events,
     error,
@@ -31,18 +45,28 @@ const EventsPage = () => {
   } = useSWR<Event[]>("/api/events/", fetcher);
   const [showForm, setShowForm] = useState(false);
 
-  if (error) return <div>Failed to load events</div>;
-  if (!events) return <div>Loading...</div>;
+  if (error)
+    return (
+      <Container>
+        <Typography color="error">Failed to load events</Typography>
+      </Container>
+    );
+  if (!events)
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
 
   const createEvent = async (newEvent: NewEvent) => {
-    if (!userContext?.user) return; // Ensure user is defined
+    if (!userContext?.user) return;
     const token = await getToken("access");
     await wretch(`${BASE_URL}/api/events/`)
       .auth(`Bearer ${token}`)
-      .post({ ...newEvent, client: userContext.user.id }) // Include client_id
+      .post({ ...newEvent, client: userContext.user.id })
       .res();
     setShowForm(false);
-    mutate(); // Revalidate the data
+    mutate();
   };
 
   const updateEvent = async (event: Event) => {
@@ -51,7 +75,7 @@ const EventsPage = () => {
       .auth(`Bearer ${token}`)
       .put(event)
       .res();
-    mutate(); // Revalidate the data
+    mutate();
   };
 
   const deleteEvent = async (id: number) => {
@@ -60,41 +84,49 @@ const EventsPage = () => {
       .auth(`Bearer ${token}`)
       .delete()
       .res();
-    mutate(); // Revalidate the data
+    mutate();
   };
 
   return (
-    <div className={styles.container}>
-      <h1>Events</h1>
-      <button
-        className={styles.addButton}
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Events
+      </Typography>
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<Add />}
         onClick={() => setShowForm(!showForm)}
       >
         Add Event
-      </button>
+      </Button>
       {showForm && (
         <EventForm
           createEvent={createEvent}
           onCancel={() => setShowForm(false)}
         />
       )}
-      <ul className={styles.list}>
+      <List>
         {events.map((event) => (
-          <li key={event.id} className={styles.item}>
-            <span className={styles.name}>{event.name}</span>
-            <Link href={`/admin/events/${event.id}`}>
-              <div className={styles.button}>Edit</div>
+          <ListItem key={event.id}>
+            <ListItemText primary={event.name} />
+            <Link href={`/admin/events/${event.id}`} passHref>
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<EditIcon />}
+                style={{ marginRight: 8 }}
+              >
+                Edit
+              </Button>
             </Link>
-            <button
-              className={styles.button}
-              onClick={() => deleteEvent(event.id)}
-            >
-              Delete
-            </button>
-          </li>
+            <IconButton color="secondary" onClick={() => deleteEvent(event.id)}>
+              <DeleteIcon />
+            </IconButton>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Container>
   );
 };
 
