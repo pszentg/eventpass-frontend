@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import wretch from "wretch";
+import wretch, { WretchError } from "wretch";
 import { AuthActions } from "@/app/auth/utils";
 import { fetcher } from "@/app/auth/fetcher";
 import { useParams, useRouter } from "next/navigation";
@@ -18,6 +18,8 @@ import {
   Box,
   CircularProgress,
   IconButton,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Edit, Save, Cancel } from "@mui/icons-material";
 
@@ -42,9 +44,22 @@ const EventDetailPage = () => {
   const [eventName, setEventName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isAddingGroup, setIsAddingGroup] = useState(false);
-  const [newGroupName, setNewGroupName] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
+
   const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [eventGroups, setEventGroups] = useState<Group[]>([]);
+
+  const emptyRegistrationForm: RegistrationFormType = {
+    id: 0,
+    event: Number(eventId),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    version_number: 1,
+    fields: [],
+  };
 
   const {
     data: event,
@@ -127,51 +142,62 @@ const EventDetailPage = () => {
     try {
       // Construct the URL with query parameters
       const queryUrl = new URL(`${BASE_URL}/api/groups/filter-by-name/`);
-      queryUrl.searchParams.append("name", newGroupName);
+      queryUrl.searchParams.append("name", groupName);
 
-      // First request to check if the group exists
-      const existingGroup = await wretch(queryUrl.toString())
-        .auth(`Bearer ${token}`)
-        .get()
-        .json<{ id: number; name: string }[]>();
-
-      console.log(existingGroup);
-
-      if (existingGroup.length > 0) {
-        // Group exists
-        groupId = existingGroup[0].id;
-      } else {
-        // Group does not exist, create it
-        const createdGroup = await wretch(`${BASE_URL}/api/groups/`)
+      try {
+        // First request to check if the group exists
+        const existingGroup = await wretch(queryUrl.toString())
           .auth(`Bearer ${token}`)
-          .post({ name: newGroupName })
+          .get()
           .json<{ id: number; name: string }>();
 
-        groupId = createdGroup.id;
+        groupId = existingGroup.id;
+      } catch (error: any) {
+        if (error.status === 404) {
+          // Group does not exist, create it
+          const createdGroup = await wretch(`${BASE_URL}/api/groups/`)
+            .auth(`Bearer ${token}`)
+            .post({ name: groupName })
+            .json<{ id: number; name: string }>();
+
+          groupId = createdGroup.id;
+        } else {
+          throw error;
+        }
       }
 
       // Second request to add the group to the event
-      await wretch(`${BASE_URL}/api/events/add-group-to-event/`)
+      await wretch(`${BASE_URL}/api/events/${eventId}/add-group-to-event/`)
         .auth(`Bearer ${token}`)
-        .post({ event_id: eventId, group_id: groupId })
-        .res();
+        .post({ group_id: groupId });
 
       setIsAddingGroup(false);
-      setNewGroupName("");
       mutateEvent(); // Refresh the event data to include the new group
+      setSnackbarMessage("Group added successfully!");
+      setSnackbarSeverity("success");
     } catch (error) {
       console.error("Error adding group to event:", error);
-      // Handle error appropriately
+      setSnackbarMessage("Failed to add group.");
+      setSnackbarSeverity("error");
     }
   };
 
-  const emptyRegistrationForm: RegistrationFormType = {
-    id: 0,
-    event: Number(eventId),
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    version_number: 1,
-    fields: [],
+  const handleDeleteGroup = async (groupId: string) => {
+    const token = await getToken("access");
+
+    try {
+      await wretch(`${BASE_URL}/api/events/${eventId}/remove-group-from-event/`)
+        .auth(`Bearer ${token}`)
+        .post({ group_id: groupId });
+
+      mutateEvent(); // Refresh the event data to remove the deleted group
+      setSnackbarMessage("Group removed successfully!");
+      setSnackbarSeverity("success");
+    } catch (error) {
+      console.error("Error removing group from event:", error);
+      setSnackbarMessage("Failed to remove group.");
+      setSnackbarSeverity("error");
+    }
   };
 
   return (
@@ -239,8 +265,25 @@ const EventDetailPage = () => {
             onCancel={() => setIsAddingGroup(false)}
           />
         )}
-        <GroupList groups={eventGroups} onEditGroup={handleGroupEdit} />
+        <GroupList
+          groups={eventGroups}
+          onEditGroup={handleGroupEdit}
+          onDeleteGroup={handleDeleteGroup}
+        />
       </Box>
+      <Snackbar
+        open={snackbarMessage !== null}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarMessage(null)}
+      >
+        <Alert
+          onClose={() => setSnackbarMessage(null)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
