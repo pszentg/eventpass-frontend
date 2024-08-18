@@ -7,17 +7,15 @@ import UserContext from "@/context/UserContext";
 import { AuthActions } from "../auth/utils"; // Import AuthActions
 import styles from "./settings.module.css";
 import EventAdminSettings from "@/components/EventAdmin/Settings";
+import { fetcher } from "../auth/fetcher";
 
 interface User {
   id: string;
   name: string;
 }
 
-const fetcher = (url: string, options: RequestInit) =>
-  wretch(url).options(options).get().json();
-
 export default function SettingsPage() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(user?.name || "");
   const [password, setPassword] = useState(""); // State to hold the password

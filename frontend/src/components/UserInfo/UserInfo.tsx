@@ -1,25 +1,38 @@
 import React from "react";
-import styles from "./UserInfo.module.css";
 import QRCode from "qrcode.react";
+import { Card, CardContent, CardHeader, Typography, Box } from "@mui/material";
 
-const UserInfo = ({ user }: { user: any }) => {
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+interface UserInfoProps {
+  user: User;
+}
+
+const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL; // Ensure this is set in your environment variables
   const qrCodeValue = `${BASE_URL}/users/add_user_to_group/${user.id}`;
 
   return (
-    <div className={styles.userInfo}>
-      <h2 className={styles.userInfoTitle}>User Information</h2>
-      <p className={styles.userInfoText}>
-        <strong>Name:</strong> {user.name}
-      </p>
-      <p className={styles.userInfoText}>
-        <strong>Email:</strong> {user.email}
-      </p>
-      <div className={styles.qrCode}>
-        <QRCode value={qrCodeValue} />
-      </div>
-      {/* Add more user information as needed */}
-    </div>
+    <Card sx={{ padding: 4, margin: "auto" }}>
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <CardHeader title="User Information" />
+        <CardContent>
+          <Typography variant="body1">
+            <strong>Name:</strong> {user.name}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Email:</strong> {user.email}
+          </Typography>
+          <Box mt={2} display="flex" justifyContent="center">
+            <QRCode value={qrCodeValue} />
+          </Box>
+        </CardContent>
+      </Box>
+    </Card>
   );
 };
 

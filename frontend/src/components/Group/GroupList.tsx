@@ -1,4 +1,13 @@
-import styles from "./Group.module.css";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Button,
+  Box,
+  ListItemSecondaryAction,
+  IconButton,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface Group {
   id: number;
@@ -8,24 +17,39 @@ interface Group {
 interface GroupListProps {
   groups: Group[];
   onEditGroup: (groupId: number) => void;
+  onDeleteGroup: (groupId: number) => void;
 }
 
-const GroupList: React.FC<GroupListProps> = ({ groups, onEditGroup }) => {
+const GroupList: React.FC<GroupListProps> = ({
+  groups,
+  onEditGroup,
+  onDeleteGroup,
+}) => {
   return (
-    <ul className={styles.list}>
+    <List>
       {groups.map((group) => (
-        <li key={group.id} className={styles.item}>
-          <span className={styles.name}>{group.name}</span>
-          <button
-            className={styles.button}
-            onClick={() => onEditGroup(group.id)}
-          >
-            Edit
-          </button>
-        </li>
+        <ListItem key={group.id}>
+          <ListItemText primary={group.name} />
+          <ListItemSecondaryAction>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => onEditGroup(group.id)}
+              style={{ marginRight: 8 }}
+            >
+              Edit
+            </Button>
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={() => onDeleteGroup(group.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   );
 };
-
 export default GroupList;
